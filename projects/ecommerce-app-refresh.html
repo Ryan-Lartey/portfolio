@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agile App MVP Delivery — Bargains Extra | Ryan Twumasi-Lartey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #0a0a0a;
+      --white:  #f5f5f5;
+      --g100:   #e8e8e8;
+      --g200:   #b0b0b0;
+      --g300:   #6b6b6b;
+      --g400:   #2e2e2e;
+      --g500:   #1a1a1a;
+      --g600:   #111111;
+      --pad:    64px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── HERO ──────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 80px var(--pad) 72px;
+      border-bottom: 1px solid var(--g400);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 50% 60% at 85% 30%, rgba(255,255,255,0.025) 0%, transparent 65%),
+        linear-gradient(175deg, transparent 55%, rgba(0,0,0,0.5) 100%);
+      pointer-events: none;
+    }
+
+    .hero-bg-index {
+      position: absolute;
+      right: 32px;
+      top: 50%;
+      transform: translateY(-55%);
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(140px, 26vw, 380px);
+      font-weight: 800;
+      color: rgba(255,255,255,0.02);
+      line-height: 1;
+      letter-spacing: -0.06em;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; z-index: 1; }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--g300);
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(44px, 8vw, 104px);
+      font-weight: 800;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .hero-client {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(22px, 4.5vw, 52px);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--g300);
+      margin-bottom: 52px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      row-gap: 24px;
+      border-top: 1px solid var(--g400);
+      padding-top: 32px;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding-right: 36px;
+      margin-right: 36px;
+      border-right: 1px solid var(--g400);
+    }
+
+    .hero-meta-item:last-child {
+      border-right: none;
+      margin-right: 0;
+      padding-right: 0;
+    }
+
+    .hero-meta-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+      color: var(--g300);
+    }
+
+    .hero-meta-value {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--g100);
+    }
+
+    /* ─── WRAP ──────────────────────────────────────────────────── */
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+
+    /* ─── STATS BAND ────────────────────────────────────────────── */
+    .stats-band { border-bottom: 1px solid var(--g400); }
+
+    .stats-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 64px var(--pad);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .stat {
+      padding: 0 28px;
+      border-right: 1px solid var(--g400);
+    }
+
+    .stat:first-child { padding-left: 0; }
+    .stat:last-child  { border-right: none; padding-right: 0; }
+
+    .stat-n {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .stat-n.large { font-size: clamp(40px, 4vw, 58px); }
+    .stat-n.word  { font-size: clamp(15px, 1.6vw, 20px); letter-spacing: -0.01em; padding-top: 4px; }
+
+    .stat-lbl {
+      font-size: 10.5px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--g300);
+      line-height: 1.55;
+    }
+
+    /* ─── COMPETENCIES BAND ─────────────────────────────────────── */
+    .comp-band { border-bottom: 1px solid var(--g400); }
+
+    .comp-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px var(--pad);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .comp-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--g300);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .comp-rule {
+      width: 1px;
+      height: 16px;
+      background: var(--g400);
+      flex-shrink: 0;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: var(--g200);
+      padding: 5px 12px;
+      border: 1px solid var(--g400);
+      white-space: nowrap;
+    }
+
+    /* ─── FEATURE SECTIONS ──────────────────────────────────────── */
+    .feature {
+      padding: 112px 0;
+      border-bottom: 1px solid var(--g400);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .f-label {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--g300);
+      margin-bottom: 14px;
+    }
+
+    .f-heading {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(24px, 2.8vw, 38px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 26px;
+    }
+
+    .f-body {
+      font-size: 14.5px;
+      line-height: 1.80;
+      color: var(--g200);
+      margin-bottom: 16px;
+    }
+
+    .f-body:last-of-type { margin-bottom: 0; }
+
+    .f-pull {
+      margin-top: 28px;
+      padding: 18px 22px;
+      border-left: 1px solid var(--g200);
+      background: var(--g600);
+    }
+
+    .f-pull p {
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--g100);
+      font-style: italic;
+    }
+
+    .f-pull cite {
+      display: block;
+      margin-top: 10px;
+      font-size: 10.5px;
+      font-style: normal;
+      letter-spacing: 0.05em;
+      color: var(--g300);
+    }
+
+    /* ─── IMAGE PLACEHOLDERS ────────────────────────────────────── */
+    .img-ph {
+      background: var(--g600);
+      border: 1px solid var(--g400);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 28px 24px 40px;
+      position: relative;
+    }
+
+    .ph-star {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 14px;
+    }
+
+    .ph-doc {
+      font-size: 11px;
+      line-height: 1.8;
+      color: var(--g200);
+    }
+
+    .ph-doc strong { color: var(--g100); font-weight: 500; }
+
+    .ph-dims {
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      font-family: monospace;
+      font-size: 9.5px;
+      color: var(--g400);
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── PDF LINK ──────────────────────────────────────────────── */
+    .pdf-link {
+      display: block;
+      width: 100%;
+      position: relative;
+      text-decoration: none;
+    }
+
+    .pdf-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--white);
+      color: var(--black);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      z-index: 2;
+    }
+
+    .pdf-hover {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px;
+      background: rgba(10,10,10,0.92);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      z-index: 2;
+    }
+
+    .pdf-link:hover .pdf-hover { opacity: 1; transform: translateY(0); }
+
+    /* ─── IMPACT TABLE ──────────────────────────────────────────── */
+    .impact {
+      padding: 112px 0;
+      border-bottom: 1px solid var(--g400);
+    }
+
+    .section-eyebrow {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--g300);
+      margin-bottom: 18px;
+    }
+
+    .section-heading {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(30px, 4vw, 50px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 56px;
+    }
+
+    .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    .itbl {
+      width: 100%;
+      min-width: 640px;
+      border-collapse: collapse;
+      border: 1px solid var(--g400);
+    }
+
+    .itbl thead tr { background: var(--g600); }
+
+    .itbl th {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--g300);
+      text-align: left;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--g400);
+    }
+
+    .itbl td {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--g200);
+      padding: 20px;
+      border-bottom: 1px solid var(--g400);
+      vertical-align: top;
+    }
+
+    .itbl tr:last-child td { border-bottom: none; }
+    .itbl tr:nth-child(even) { background: rgba(255,255,255,0.012); }
+    .itbl .area { font-weight: 500; color: var(--white); white-space: nowrap; }
+    .itbl .outcome { color: var(--g100); }
+
+    /* ─── REFLECTION GRID ───────────────────────────────────────── */
+    .reflection {
+      padding: 112px 0;
+      border-bottom: 1px solid var(--g400);
+    }
+
+    .reflect-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--g400);
+      border: 1px solid var(--g400);
+    }
+
+    .reflect-cell {
+      background: var(--black);
+      padding: 44px 40px;
+    }
+
+    .rc-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--g300);
+      margin-bottom: 14px;
+    }
+
+    .rc-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.18;
+      color: var(--white);
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .rc-body {
+      font-size: 13.5px;
+      line-height: 1.80;
+      color: var(--g200);
+    }
+
+    /* ─── CLOSER ────────────────────────────────────────────────── */
+    .closer {
+      padding: 140px 0 120px;
+    }
+
+    .closer-inner { max-width: 820px; }
+
+    .closer-label {
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--g300);
+      margin-bottom: 44px;
+    }
+
+    .closer-statement {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(18px, 2.5vw, 30px);
+      font-weight: 500;
+      line-height: 1.5;
+      letter-spacing: -0.015em;
+      color: var(--white);
+    }
+
+    .closer-statement em {
+      font-style: italic;
+      color: var(--g200);
+    }
+
+    .closer-byline {
+      margin-top: 60px;
+      padding-top: 32px;
+      border-top: 1px solid var(--g400);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .closer-byline strong {
+      color: var(--g100);
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .byline-sep {
+      color: var(--g400);
+      font-size: 12px;
+    }
+
+    .byline-tag {
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--g300);
+      padding: 3px 10px;
+      border: 1px solid var(--g400);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       TABLET  ≤ 900px
+    ════════════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      :root { --pad: 36px; }
+
+      .hero { padding: 72px var(--pad) 60px; }
+
+      .stats-inner {
+        grid-template-columns: repeat(3, 1fr);
+        padding: 48px var(--pad);
+        gap: 0;
+      }
+
+      .stat { padding: 0 20px; }
+      .stat:first-child { padding-left: 0; }
+      .stat:nth-child(3) { border-right: none; padding-right: 0; }
+      .stat:nth-child(-n+3) { padding-bottom: 32px; border-bottom: 1px solid var(--g400); }
+      .stat:nth-child(n+4)  { padding-top: 32px; border-right: none; }
+      .stat:nth-child(4)    { padding-left: 0; }
+      .stat:last-child      { border-right: none; padding-right: 0; }
+
+      .feature { padding: 80px 0; }
+      .feature-grid { grid-template-columns: 1fr; gap: 44px; }
+
+      .feature-grid.img-first .feat-img { order: -1; }
+
+      .impact    { padding: 80px 0; }
+      .reflection { padding: 80px 0; }
+      .closer    { padding: 96px 0 80px; }
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       MOBILE  ≤ 580px
+    ════════════════════════════════════════════════════════════ */
+    @media (max-width: 580px) {
+      :root { --pad: 20px; }
+
+      /* Hero */
+      .hero { padding: 64px var(--pad) 48px; }
+      .hero-bg-index { display: none; }
+      .hero-eyebrow  { font-size: 9px; letter-spacing: 0.12em; margin-bottom: 18px; }
+      .hero-title    { font-size: clamp(38px, 11vw, 56px); }
+      .hero-client   { font-size: clamp(20px, 6.5vw, 30px); margin-bottom: 36px; }
+
+      /* Meta: stack as rows */
+      .hero-meta { flex-direction: column; row-gap: 0; padding-top: 0; border-top: none; }
+
+      .hero-meta-item {
+        flex-direction: row;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 0;
+        margin: 0;
+        border-right: none;
+        border-top: 1px solid var(--g400);
+      }
+
+      /* Stats: 2-col grid */
+      .stats-inner {
+        grid-template-columns: 1fr 1fr;
+        padding: 36px var(--pad);
+        gap: 0;
+      }
+
+      .stat { border-right: none !important; border-bottom: none !important; padding: 0 !important; }
+
+      .stat:nth-child(odd)  { padding-right: 16px !important; border-right: 1px solid var(--g400) !important; }
+      .stat:nth-child(even) { padding-left: 16px !important; }
+      .stat:nth-child(-n+4) { padding-bottom: 24px !important; border-bottom: 1px solid var(--g400) !important; }
+      .stat:nth-child(n+3)  { padding-top: 24px !important; }
+      .stat:last-child {
+        grid-column: 1 / -1;
+        border-right: none !important;
+        padding: 24px 0 0 !important;
+        border-bottom: none !important;
+      }
+
+      /* Competencies */
+      .comp-inner  { padding: 24px var(--pad); gap: 8px; }
+      .comp-rule   { display: none; }
+      .comp-label  { width: 100%; }
+
+      /* Features */
+      .feature     { padding: 56px 0; }
+      .feature-grid { gap: 32px; }
+      .f-heading   { font-size: clamp(22px, 7vw, 30px); }
+      .f-body      { font-size: 14px; }
+      .f-pull      { margin-top: 20px; padding: 14px 16px; }
+      .f-pull p    { font-size: 12.5px; }
+
+      /* Impact table */
+      .impact { padding: 56px 0; }
+      .section-heading { font-size: clamp(26px, 8vw, 36px); margin-bottom: 32px; }
+
+      /* Reflection */
+      .reflection  { padding: 56px 0; }
+      .reflect-grid { grid-template-columns: 1fr; }
+      .reflect-cell { padding: 30px 20px; }
+      .rc-title     { font-size: 17px; }
+      .rc-body      { font-size: 13px; }
+
+      /* Closer */
+      .closer { padding: 64px 0 56px; }
+      .closer-statement { font-size: clamp(16px, 5.5vw, 22px); }
+      .closer-byline {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 40px;
+      }
+      .byline-sep { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-bg-index">03</span>
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Applied PM Traineeship &nbsp;·&nbsp; AgilePM Framework</p>
+    <h1 class="hero-title">Agile App MVP<br>Delivery</h1>
+    <p class="hero-client">Bargains Extra</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Role</span>
+        <span class="hero-meta-value">Project Manager</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Framework</span>
+        <span class="hero-meta-value">AgilePM · Kanban</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Delivery</span>
+        <span class="hero-meta-value">4-Sprint Cycle</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Sector</span>
+        <span class="hero-meta-value">Retail / Ecommerce</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Artefacts</span>
+        <span class="hero-meta-value">9 Deliverables</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-band">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-n large">4</div>
+      <div class="stat-lbl">Sprint<br>Delivery Cycle</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n large">5</div>
+      <div class="stat-lbl">Backlog<br>Categories</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n large">3</div>
+      <div class="stat-lbl">Active Risks<br>Managed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n large">3</div>
+      <div class="stat-lbl">Issues<br>Escalated</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n word">AMBER<br>→ Managed</div>
+      <div class="stat-lbl">RAG Trajectory<br>Sprint 2 → Sprint 3</div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPETENCIES -->
+<section class="comp-band">
+  <div class="comp-inner">
+    <span class="comp-label">PM Competencies</span>
+    <div class="comp-rule"></div>
+    <span class="tag">Backlog Prioritisation</span>
+    <span class="tag">Risk Management</span>
+    <span class="tag">Issue Escalation</span>
+    <span class="tag">Sprint Reporting</span>
+    <span class="tag">Resource Negotiation</span>
+    <span class="tag">Stakeholder Comms</span>
+    <span class="tag">Scope Control</span>
+    <span class="tag">Sprint Goal Setting</span>
+    <span class="tag">Portfolio Sequencing</span>
+    <span class="tag">RAG Governance</span>
+  </div>
+</section>
+
+<!-- FEATURE 01 — text / image -->
+<section class="feature">
+  <div class="wrap">
+    <div class="feature-grid">
+      <div class="feat-txt">
+        <p class="f-label">01 — The Brief</p>
+        <h2 class="f-heading">Twelve Features.<br>One MVP.<br>Clear Priorities.</h2>
+        <p class="f-body">Bargains Extra — a multi-channel retail business — was mid-sprint on a mobile App Refresh when the traineeship brief began. The delivery goal: an MVP covering multiple payment methods, improved UI/UX, wider product range, store location features, finance reporting, and a robust backup process. My brief extended further: map the full project portfolio and determine delivery sequencing beyond the App Refresh.</p>
+        <p class="f-body">Working across five stakeholder roadmaps — ecommerce, warehouse, customer, finance, and stores — I prioritised a 12-item feature list by MVP alignment and strategic objective. Each ranking was source-evidenced with direct quotes from the Ecommerce Roadmap, the Project Goal, and stakeholder emails cited against every decision.</p>
+        <p class="f-body">For post-MVP sequencing, I identified three projects: Data Protection Process Improvements (P004 — regulatory risk, external audit incoming), CRM System (P005 — foundational for customer engagement), and Customer Loyalty Programme (P002 — highest strategic return once CRM was live).</p>
+        <div class="f-pull">
+          <p>"The Customer team are desperate for a way to communicate with customers on a personal level. Studies show that this increases customer retention and repeat purchases."</p>
+          <cite>— Product Owner Email · Source for P005 / CRM prioritisation</cite>
+        </div>
+      </div>
+      <div class="feat-img">
+        <!--
+          ★ IMAGE 1
+          File:  1b, 2, 3, 4, 5 Project Templates for Completion - AGILE (AP).xlsx
+          Sheet: 1b) Project Portfolio
+          State: All 10 rows (P001–P010) visible. Highlight P002, P004, P005.
+                 All 5 column headers legible. Fit columns — no horizontal scroll.
+          Crop:  Header → P010. Remove empty rows below.
+          Dims:  Renders at 536 × 340px (capture at 2× = 1072 × 680px)
+        -->
+        <div class="img-ph" style="aspect-ratio:536/340;">
+          <p class="ph-star">★ IMAGE 1</p>
+          <p class="ph-doc">
+            <strong>File:</strong> Project Templates (AP).xlsx<br>
+            <strong>Sheet:</strong> 1b) Project Portfolio<br>
+            <strong>State:</strong> P001–P010, highlight P002/P004/P005<br>
+            <strong>Cols:</strong> All 5 headers legible, no scroll<br>
+            <strong>Crop:</strong> Header → P010, remove empty rows
+          </p>
+          <span class="ph-dims">536 × 340px</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 02 — image / text -->
+<section class="feature">
+  <div class="wrap">
+    <div class="feature-grid img-first">
+      <div class="feat-img">
+        <!--
+          ★ IMAGE 2
+          File:  Same xlsx · Sheet: 2) Kanban Board
+          State: All 5 columns visible. 6 strikethrough items in TO DO clearly struck through.
+          Crop:  Header → last populated row. No blank rows.
+          Dims:  Renders at 536 × 400px (capture at 2× = 1072 × 800px)
+        -->
+        <div class="img-ph" style="aspect-ratio:536/400;">
+          <p class="ph-star">★ IMAGE 2</p>
+          <p class="ph-doc">
+            <strong>File:</strong> Same xlsx · <strong>Sheet:</strong> 2) Kanban Board<br>
+            <strong>State:</strong> All 5 cols visible. 6 strikethrough items<br>
+            in TO DO must be clearly struck through.<br>
+            <strong>Crop:</strong> Header → last row. No blank rows.
+          </p>
+          <span class="ph-dims">536 × 400px</span>
+        </div>
+      </div>
+      <div class="feat-txt">
+        <p class="f-label">02 — Backlog Governance</p>
+        <h2 class="f-heading">Curating the Board.<br>Removing<br>the Noise.</h2>
+        <p class="f-body">The sprint backlog had accumulated items entirely unrelated to the project goal. Developers — as noted in standup — "don't always stick to the product roadmap," meaning the TO DO column had features like a BBC News live feed, in-app gaming, and social media widgets sitting alongside MVP-critical payment and security work.</p>
+        <p class="f-body">I audited every Kanban item against the Project Goal's five MVP criteria, striking through six out-of-scope entries and documenting inclusion rationale for everything that remained. Sources cited ranged from the Ecommerce Roadmap to the Audit Lead's direct instruction, used to justify why security features moved into NEXT SPRINT rather than FUTURE WORK.</p>
+        <p class="f-body">The result: a clean five-column board with a fully traceable backlog. Every item had a reason to be there. Every removed item had a documented reason for removal. This is the discipline that keeps sprint velocity aligned to stakeholder value.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 03 — text / image -->
+<section class="feature">
+  <div class="wrap">
+    <div class="feature-grid">
+      <div class="feat-txt">
+        <p class="f-label">03 — Risk Register</p>
+        <h2 class="f-heading">Three Risks.<br>All Live.<br>All Owned.</h2>
+        <p class="f-body">Three risks were active simultaneously entering Sprint 3. Developer licences missing (R001): two team members unable to work on payment features, directly threatening the highest-priority MVP deliverable. Information security incomplete (R002): an external audit arriving in two weeks, security work not yet started, Test Lead on leave for the entire sprint. UX/UI overallocation (R003): the Website PM consuming 75% of a shared design resource against an agreed 50% split.</p>
+        <p class="f-body">Each risk was scored using the Impact × Likelihood matrix. R001 and R002 both returned a score of 20 (5 × 4) — the highest possible without maximum probability on both axes. R003 scored 12 (4 × 3). All three were owned by the PM, reflecting that blockers affecting sprint delivery sit within the PM's accountability boundary.</p>
+        <p class="f-body">Escalation triggers were documented in advance. If the licence issue hadn't resolved within one week, the next action was already defined. Pre-defined escalation paths mean nothing gets stuck in the gap between "being monitored" and "becoming a crisis."</p>
+      </div>
+      <div class="feat-img">
+        <!--
+          ★ IMAGE 3
+          File:  Same xlsx · Sheet: 3) Risk Log
+          State: Header + R001, R002, R003 only. Scores 20/20/12 legible.
+                 All 10 column headers visible. Cut R004–R025.
+          Dims:  Renders at 536 × 280px (capture at 2× = 1072 × 560px)
+        -->
+        <div class="img-ph" style="aspect-ratio:536/280;">
+          <p class="ph-star">★ IMAGE 3</p>
+          <p class="ph-doc">
+            <strong>File:</strong> Same xlsx · <strong>Sheet:</strong> 3) Risk Log<br>
+            <strong>Rows:</strong> Header + R001–R003 only. Cut empty rows.<br>
+            <strong>Scores:</strong> 20 / 20 / 12 must be legible.<br>
+            <strong>Cols:</strong> All 10 headers visible, fit to width.
+          </p>
+          <span class="ph-dims">536 × 280px</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 04 — image / text -->
+<section class="feature">
+  <div class="wrap">
+    <div class="feature-grid img-first">
+      <div class="feat-img">
+        <!--
+          ★ IMAGE 4
+          File:  Same xlsx · Sheet: 4) Issue Log
+          State: Header + I001, I002, I003 only. RAG values (4/3/4) legible.
+                 All 9 column headers visible. Cut I004–I025.
+          Dims:  Renders at 536 × 280px (capture at 2× = 1072 × 560px)
+        -->
+        <div class="img-ph" style="aspect-ratio:536/280;">
+          <p class="ph-star">★ IMAGE 4</p>
+          <p class="ph-doc">
+            <strong>File:</strong> Same xlsx · <strong>Sheet:</strong> 4) Issue Log<br>
+            <strong>Rows:</strong> Header + I001–I003 only. Cut empty rows.<br>
+            <strong>RAG:</strong> Values 4/3/4 (or Red/Amber/Red) legible.<br>
+            <strong>Cols:</strong> All 9 headers visible, fit to width.
+          </p>
+          <span class="ph-dims">536 × 280px</span>
+        </div>
+      </div>
+      <div class="feat-txt">
+        <p class="f-label">04 — Issue Management</p>
+        <h2 class="f-heading">Real-Time Impact.<br>Clear<br>Accountability.</h2>
+        <p class="f-body">The issue log captured the same three blockers as the risk register, but through a different lens. Where risks track probability and prevention, issues document active impact and live resolution ownership. The same problems — licence access, test cover, vendor SLA breach — read differently once they've already materialised in sprint.</p>
+        <p class="f-body">I001 (licence access) was rated Red with a five-day resolution target and PM ownership. I002 (Test Lead on annual leave for all of Sprint 3) rated Amber — QA coverage was achievable if the Scrum Master reprioritised. I003 (third-party vendor SLA breach following a company acquisition) was Red, requiring direct vendor engagement and a pre-defined escalation path to the Chief of Staff.</p>
+        <p class="f-body">Issue ownership rationale was documented explicitly: not just who would fix it, but why that role was the right one. That clarity prevents accountability gaps — the most common reason issues stay open a week longer than they should.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 05 — text / PDF image -->
+<section class="feature">
+  <div class="wrap">
+    <div class="feature-grid">
+      <div class="feat-txt">
+        <p class="f-label">05 — Sprint Reporting</p>
+        <h2 class="f-heading">Amber Across<br>the Board.<br>Transparent by Design.</h2>
+        <p class="f-body">The End of Sprint Highlight Report for Sprint 2 rated Amber overall. Scope, Resources, and Timelines each scored Amber independently — and the RAG matrix rule was unambiguous: more than one Amber sub-category equals an Amber overall. Costs held at Green. An honest report, not a managed one.</p>
+        <p class="f-body">The report carried two formal escalations: developer licence access (R001/I001) and UX/UI overallocation (R003), both requiring action outside the PM's direct control and cross-referenced to their risk and issue log entries. Information security readiness (R002) was documented with the external audit timeline as explicit justification for Sprint 3 urgency.</p>
+        <p class="f-body">Next-period objectives were direct and fully source-evidenced — every objective traces back to a sprint note, stakeholder email, or risk log entry. The Highlight Report is a live governance document: every line points forward to the next decision that needs to be made.</p>
+        <div class="f-pull">
+          <p>The full Sprint Highlight Report is available as a download. Click the document image to save the original PDF artefact.</p>
+        </div>
+      </div>
+      <div class="feat-img">
+        <!--
+          ★ IMAGE 5 — CLICKABLE PDF DOWNLOAD
+          File:  6) End of Sprint (Highlight) Report - AP.pdf  (page 1 only)
+          State: Full page portrait capture. RAG row (AMBER×4 + GREEN×1) must
+                 be clearly visible. All 4 reporting quadrants readable.
+                 Crop just before the RAG definition table at bottom of page.
+          Dims:  Renders at 536 × 700px (capture at 2× = 1072 × 1400px)
+
+          TO ACTIVATE DOWNLOAD:
+          1. Upload "End-of-Sprint-Report-AP.pdf" to same Hostinger folder.
+          2. Replace the .img-ph div below with:
+               <img src="sprint-report-screenshot.png"
+                    alt="End of Sprint Highlight Report" style="width:100%;display:block;">
+          3. The <a class="pdf-link"> wrapper, .pdf-badge and .pdf-hover
+             overlays are already wired — no extra CSS needed.
+        -->
+        <a href="./End-of-Sprint-Report-AP.pdf" download class="pdf-link">
+          <div class="img-ph" style="aspect-ratio:536/700; width:100%;">
+            <p class="ph-star">★ IMAGE 5 — CLICKABLE PDF</p>
+            <p class="ph-doc">
+              <strong>File:</strong> End of Sprint (Highlight) Report - AP.pdf<br>
+              <strong>Page:</strong> Page 1, portrait orientation.<br>
+              <strong>State:</strong> RAG row (AMBER/AMBER/AMBER/AMBER/GREEN)<br>
+              + all 4 quadrants readable. Crop before RAG definition table.<br>
+              <br>
+              Replace this div with &lt;img&gt; inside the existing<br>
+              &lt;a class="pdf-link"&gt; — see HTML comment above.
+            </p>
+            <span class="ph-dims">536 × 700px</span>
+          </div>
+          <div class="pdf-badge">↓ PDF</div>
+          <div class="pdf-hover">Download Sprint Report</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 06 — image / text -->
+<section class="feature">
+  <div class="wrap">
+    <div class="feature-grid img-first">
+      <div class="feat-img">
+        <!--
+          ★ IMAGE 6
+          File:  Same xlsx · Sheet: 5) Sprint 1 - Planned vs Actual
+          State: Data table + bar chart if present or created.
+                 Dev 4 (planned 10 → actual 20) and Dev 1 (planned 10 → actual 5) legible.
+          Dims:  Renders at 536 × 280px (capture at 2× = 1072 × 560px)
+        -->
+        <div class="img-ph" style="aspect-ratio:536/280;">
+          <p class="ph-star">★ IMAGE 6</p>
+          <p class="ph-doc">
+            <strong>File:</strong> Same xlsx · <strong>Sheet:</strong> Sprint 1 Planned vs Actual<br>
+            <strong>State:</strong> Data table + bar chart if present/created.<br>
+            Dev 4 (10→20) and Dev 1 (10→5) must be clearly legible.
+          </p>
+          <span class="ph-dims">536 × 280px</span>
+        </div>
+      </div>
+      <div class="feat-txt">
+        <p class="f-label">06 — Performance Analysis</p>
+        <h2 class="f-heading">Reading the Variance.<br>Asking the Right<br>Questions.</h2>
+        <p class="f-body">The Sprint 1 Planned vs Actual chart revealed sharp delivery variance across the team. Dev 4 completed 20 tasks against a plan of 10 — double. Dev 1 delivered 5 against a plan of 10 — half. These aren't minor rounding errors. They're signals of scope drift, untracked backlog additions, or a hidden blocker — and the PM's job is to determine which, before those patterns compound into Sprint 3.</p>
+        <p class="f-body">I raised three targeted questions for the Scrum Master: Why did Dev 4 over-deliver — scope creep or unplanned items added mid-sprint? Why did Dev 1 under-deliver — was this one of the developers blocked by missing licences? Were any unplanned tasks formally reprioritised? Each question was linked to supporting evidence from the scenario notes.</p>
+        <p class="f-body">On resources, I negotiated the UX/UI split in parallel — a prioritisation meeting with the Website PM, supported by a burndown chart and workload tracker — and scoped CRM discovery for Sprint 3 as requirements-gathering only, protecting MVP focus while building the foundation for the next phase.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT TABLE -->
+<section class="impact">
+  <div class="wrap">
+    <p class="section-eyebrow">Delivery Outcomes</p>
+    <h2 class="section-heading">Decisions Made.<br>Actions Taken. Results.</h2>
+    <div class="tbl-scroll">
+      <table class="itbl">
+        <thead>
+          <tr>
+            <th style="width:15%;">Area</th>
+            <th style="width:27%;">Challenge</th>
+            <th style="width:33%;">PM Response</th>
+            <th style="width:25%;">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="area">Payment Delivery</td>
+            <td>Two developers blocked by missing tool licences; payment features unable to progress</td>
+            <td>Escalated to procurement with 5-day target; leadership escalation trigger pre-defined in risk log</td>
+            <td class="outcome">Sprint 3 payment backlog unblocked; escalation path documented</td>
+          </tr>
+          <tr>
+            <td class="area">Audit Compliance</td>
+            <td>Security features not started; external audit in two weeks; Test Lead on leave</td>
+            <td>Fast-tracked into Sprint 3 goal; security consultant option documented; audit deadline used as hard sprint boundary</td>
+            <td class="outcome">Compliance delivery path secured within the audit window</td>
+          </tr>
+          <tr>
+            <td class="area">UX/UI Delivery</td>
+            <td>Website PM consuming 75% of shared design resource against agreed 50%</td>
+            <td>Prioritisation meeting with evidence — burndown chart and workload tracker; 50/50 split reconfirmed</td>
+            <td class="outcome">Resource balance restored; Sprint 3 design progress resumed</td>
+          </tr>
+          <tr>
+            <td class="area">Stakeholder Mgmt</td>
+            <td>Chief of Staff requesting ad hoc feature additions for Sprint 4 demo through informal channels</td>
+            <td>Structured reply with formal intake via PM/PO email; demo scope communicated proactively</td>
+            <td class="outcome">Expectations set; requests formalised through backlog; scope creep controlled</td>
+          </tr>
+          <tr>
+            <td class="area">Sprint Performance</td>
+            <td>Dev 4 at double planned output; Dev 1 at 50% — both unexplained in Sprint 2</td>
+            <td>Three targeted Scrum Master questions raised with source evidence; variance linked to blockers and backlog gaps</td>
+            <td class="outcome">Root causes identified; Sprint 3 planning informed by variance data</td>
+          </tr>
+          <tr>
+            <td class="area">Backlog Discipline</td>
+            <td>Six off-roadmap items (gaming, news feed, social media) accumulating alongside MVP work</td>
+            <td>Full Kanban audit against Project Goal's five MVP criteria; every removal source-evidenced</td>
+            <td class="outcome">Backlog aligned to MVP; scope creep made visible and removed before Sprint 3</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- REFLECTION GRID -->
+<section class="reflection">
+  <div class="wrap">
+    <p class="section-eyebrow">PM Reflection</p>
+    <h2 class="section-heading">What This Project<br>Taught Me.</h2>
+    <div class="reflect-grid">
+      <div class="reflect-cell">
+        <p class="rc-label">What I Got Right</p>
+        <h3 class="rc-title">Evidence before action</h3>
+        <p class="rc-body">Every decision — risk scoring, issue ownership, backlog curation, stakeholder reply — was grounded in a named source document with an exact quote. This isn't bureaucratic compliance; it's what separates structured PM thinking from reactive improvisation. When the rationale is built from the start, escalation decisions become cleaner and faster because the evidence chain is already there.</p>
+      </div>
+      <div class="reflect-cell">
+        <p class="rc-label">What I'd Sharpen</p>
+        <h3 class="rc-title">Earlier sprint variance visibility</h3>
+        <p class="rc-body">Sprint 1 showed significant delivery variance, but the data only surfaced once the sprint had closed. In a live project, I'd push for mid-sprint check-ins with the Scrum Master — not to micromanage, but to catch Dev 4's scope drift and Dev 1's blocker before they compound. Earlier visibility produces earlier correction.</p>
+      </div>
+      <div class="reflect-cell">
+        <p class="rc-label">What This Demonstrates</p>
+        <h3 class="rc-title">Governance under concurrent pressure</h3>
+        <p class="rc-body">Three simultaneous blockers, an external audit deadline, a cross-project resource dispute, and a board-level demo commitment all lived in the same sprint window. Holding those threads in a coherent governance structure — knowing which to own, which to delegate, and which to escalate — is the core PM skill this project tested.</p>
+      </div>
+      <div class="reflect-cell">
+        <p class="rc-label">What I'd Build On Next</p>
+        <h3 class="rc-title">Sprint velocity across all four</h3>
+        <p class="rc-body">With four sprints in the cycle but only Sprint 1 data visible, the planned vs actual snapshot is one data point rather than a trend. A velocity chart across all four sprints would make the Sprint 4 demo commitment significantly more defensible, and would add compelling weight to the resource negotiation argument.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSER -->
+<section class="closer">
+  <div class="wrap">
+    <div class="closer-inner">
+      <p class="closer-label">Closing Statement</p>
+      <p class="closer-statement">
+        This project was an exercise in managing the full width of the PM role simultaneously — not sequentially. The backlog needed curating. Three risks needed owning. Three issues needed escalating. A stakeholder email to the Chief of Staff needed a carefully structured reply. A sprint report needed to be honest about what Amber actually meant. <em>All of this, in the same sprint window, with the same delivery deadline visible on the horizon.</em>
+        <br><br>
+        The nine artefacts produced across this traineeship — each one grounded in source-evidenced rationale — demonstrate the kind of structured, document-first PM thinking that holds up to scrutiny in a real governance review. Not just completing tasks, but understanding why every decision was made, who should own it, and what happens next if it doesn't resolve on schedule. That is the standard I hold my PM work to.
+      </p>
+      <div class="closer-byline">
+        <strong>Ryan Lartey</strong>
+        <span class="byline-sep">·</span>
+        <span class="byline-tag">PRINCE2 Foundation</span>
+        <span class="byline-tag">AgilePM Foundation</span>
+        <span class="byline-tag">Applied PM Traineeship</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
