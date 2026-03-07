@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waterfall Infrastructure Delivery — Ryan Lartey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #0a0a0a;
+      --white:  #f5f5f5;
+      --g100:   #e8e8e8;
+      --g200:   #b0b0b0;
+      --g300:   #6b6b6b;
+      --g400:   #2e2e2e;
+      --g500:   #1a1a1a;
+      --g600:   #111111;
+      --pad:    64px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAV ─────────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--pad);
+      height: 60px;
+      background: rgba(10,10,10,0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--g400);
+    }
+
+    .nav-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-back {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--g200);
+      text-decoration: none;
+      padding: 7px 16px;
+      border: 1px solid var(--g400);
+      transition: color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .nav-back:hover { color: var(--white); border-color: var(--g200); }
+
+    /* ─── HERO ────────────────────────────────────────────── */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 80px var(--pad) 72px;
+      padding-top: calc(80px + 60px);
+      border-bottom: 1px solid var(--g400);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 50% 60% at 85% 30%, rgba(255,255,255,0.025) 0%, transparent 65%),
+        linear-gradient(175deg, transparent 55%, rgba(0,0,0,0.5) 100%);
+      pointer-events: none;
+    }
+
+    .hero-bg-index {
+      position: absolute;
+      right: 32px;
+      top: 50%;
+      transform: translateY(-55%);
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(140px, 26vw, 380px);
+      font-weight: 800;
+      color: rgba(255,255,255,0.02);
+      line-height: 1;
+      letter-spacing: -0.06em;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; z-index: 1; }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--g300);
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(44px, 8vw, 104px);
+      font-weight: 800;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .hero-client {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(22px, 4.5vw, 52px);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--g300);
+      margin-bottom: 52px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      row-gap: 24px;
+      border-top: 1px solid var(--g400);
+      padding-top: 32px;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding-right: 36px;
+      margin-right: 36px;
+      border-right: 1px solid var(--g400);
+    }
+
+    .hero-meta-item:last-child {
+      border-right: none;
+      margin-right: 0;
+      padding-right: 0;
+    }
+
+    .hero-meta-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+      color: var(--g300);
+    }
+
+    .hero-meta-value {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--g100);
+    }
+
+    /* ─── WRAP ────────────────────────────────────────────── */
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+
+    /* ─── STATS BAND ──────────────────────────────────────── */
+    .stats-band { border-bottom: 1px solid var(--g400); }
+
+    .stats-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 64px var(--pad);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .stat {
+      padding: 0 28px;
+      border-right: 1px solid var(--g400);
+    }
+
+    .stat:first-child { padding-left: 0; }
+    .stat:last-child  { border-right: none; padding-right: 0; }
+
+    .stat-n {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .stat-n.large { font-size: clamp(40px, 4vw, 58px); }
+    .stat-n.word  { font-size: clamp(15px, 1.6vw, 20px); letter-spacing: -0.01em; padding-top: 4px; }
+
+    .stat-lbl {
+      font-size: 10.5px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--g300);
+      line-height: 1.55;
+    }
+
+    /* ─── COMPETENCIES BAND ───────────────────────────────── */
+    .comp-band { border-bottom: 1px solid var(--g400); }
+
+    .comp-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px var(--pad);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .comp-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--g300);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .comp-rule {
+      width: 1px;
+      height: 16px;
+      background: var(--g400);
+      flex-shrink: 0;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: var(--g200);
+      padding: 5px 12px;
+      border: 1px solid var(--g400);
+      white-space: nowrap;
+    }
+
+    /* ─── FEATURE SECTIONS ────────────────────────────────── */
+    .feature {
+      padding: 112px 0;
+      border-bottom: 1px solid var(--g400);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .f-label {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--g300);
+      margin-bottom: 14px;
+    }
+
+    .f-heading {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(24px, 2.8vw, 38px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 26px;
+    }
+
+    .f-body {
+      font-size: 14.5px;
+      line-height: 1.80;
+      color: var(--g200);
+      margin-bottom: 16px;
+    }
+
+    .f-body:last-of-type { margin-bottom: 0; }
+
+    .f-pull {
+      margin-top: 28px;
+      padding: 18px 22px;
+      border-left: 1px solid var(--g200);
+      background: var(--g600);
+    }
+
+    .f-pull p {
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--g100);
+      font-style: italic;
+    }
+
+    /* ─── IMAGE PLACEHOLDERS ──────────────────────────────── */
+    .img-ph {
+      background: var(--g600);
+      border: 1px solid var(--g400);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 28px 24px 40px;
+      position: relative;
+    }
+
+    .ph-star {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 14px;
+    }
+
+    .ph-doc {
+      font-size: 11px;
+      line-height: 1.8;
+      color: var(--g200);
+    }
+
+    .ph-doc strong { color: var(--g100); font-weight: 500; }
+
+    .ph-dims {
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      font-family: monospace;
+      font-size: 9.5px;
+      color: var(--g400);
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── PDF LINK ────────────────────────────────────────── */
+    .pdf-link {
+      display: block;
+      width: 100%;
+      position: relative;
+      text-decoration: none;
+    }
+
+    .pdf-badge {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: var(--white);
+      color: var(--black);
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      z-index: 2;
+    }
+
+    .pdf-hover {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 16px;
+      background: rgba(10,10,10,0.92);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      z-index: 2;
+    }
+
+    .pdf-link:hover .pdf-hover { opacity: 1; transform: translateY(0); }
+
+    /* ─── IMPACT TABLE ────────────────────────────────────── */
+    .impact {
+      padding: 112px 0;
+      border-bottom: 1px solid var(--g400);
+    }
+
+    .section-eyebrow {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--g300);
+      margin-bottom: 18px;
+    }
+
+    .section-heading {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(30px, 4vw, 50px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 56px;
+    }
+
+    .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    .itbl {
+      width: 100%;
+      min-width: 640px;
+      border-collapse: collapse;
+      border: 1px solid var(--g400);
+    }
+
+    .itbl thead tr { background: var(--g600); }
+
+    .itbl th {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--g300);
+      text-align: left;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--g400);
+    }
+
+    .itbl td {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--g200);
+      padding: 20px;
+      border-bottom: 1px solid var(--g400);
+      vertical-align: top;
+    }
+
+    .itbl tr:last-child td { border-bottom: none; }
+    .itbl tr:nth-child(even) { background: rgba(255,255,255,0.012); }
+    .itbl .area { font-weight: 500; color: var(--white); white-space: nowrap; }
+    .itbl .ref  { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: var(--g300); display: block; margin-top: 3px; }
+    .itbl .outcome { color: var(--g100); }
+
+    /* ─── REFLECTION GRID ─────────────────────────────────── */
+    .reflection {
+      padding: 112px 0;
+      border-bottom: 1px solid var(--g400);
+    }
+
+    .reflect-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--g400);
+      border: 1px solid var(--g400);
+    }
+
+    .reflect-cell {
+      background: var(--black);
+      padding: 44px 40px;
+    }
+
+    .rc-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--g300);
+      margin-bottom: 14px;
+    }
+
+    .rc-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.18;
+      color: var(--white);
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .rc-body {
+      font-size: 13.5px;
+      line-height: 1.80;
+      color: var(--g200);
+    }
+
+    /* ─── CLOSER ──────────────────────────────────────────── */
+    .closer { padding: 140px 0 120px; }
+
+    .closer-inner { max-width: 820px; }
+
+    .closer-label {
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--g300);
+      margin-bottom: 44px;
+    }
+
+    .closer-statement {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(18px, 2.5vw, 30px);
+      font-weight: 500;
+      line-height: 1.5;
+      letter-spacing: -0.015em;
+      color: var(--white);
+    }
+
+    .closer-statement em {
+      font-style: italic;
+      color: var(--g200);
+    }
+
+    .closer-byline {
+      margin-top: 60px;
+      padding-top: 32px;
+      border-top: 1px solid var(--g400);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .closer-byline strong {
+      color: var(--g100);
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .byline-sep { color: var(--g400); font-size: 12px; }
+
+    .byline-tag {
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--g300);
+      padding: 3px 10px;
+      border: 1px solid var(--g400);
+    }
+
+    /* ─── FEATURE TAGS (small inline labels) ─────────────── */
+    .f-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 24px;
+    }
+
+    .f-tag {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--g300);
+      border: 1px solid var(--g400);
+      padding: 5px 10px;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       TABLET ≤ 900px
+    ════════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      :root { --pad: 36px; }
+
+      .hero { padding: 72px var(--pad) 60px; }
+
+      .stats-inner {
+        grid-template-columns: repeat(3, 1fr);
+        padding: 48px var(--pad);
+        gap: 0;
+      }
+
+      .stat { padding: 0 20px; }
+      .stat:first-child { padding-left: 0; }
+      .stat:nth-child(3) { border-right: none; padding-right: 0; }
+      .stat:nth-child(-n+3) { padding-bottom: 32px; border-bottom: 1px solid var(--g400); }
+      .stat:nth-child(n+4)  { padding-top: 32px; border-right: none; }
+      .stat:nth-child(4) { padding-left: 0; }
+      .stat:last-child   { border-right: none; padding-right: 0; }
+
+      .feature { padding: 80px 0; }
+      .feature-grid { grid-template-columns: 1fr; gap: 44px; }
+      .feature-grid.img-first .feat-img { order: -1; }
+
+      .impact     { padding: 80px 0; }
+      .reflection { padding: 80px 0; }
+      .closer     { padding: 96px 0 80px; }
+    }
+
+    /* ════════════════════════════════════════════════════════
+       MOBILE ≤ 580px
+    ════════════════════════════════════════════════════════ */
+    @media (max-width: 580px) {
+      :root { --pad: 20px; }
+
+      .nav { padding: 0 20px; }
+      .nav-name { font-size: 12px; }
+
+      .hero { padding: 64px var(--pad) 48px; }
+      .hero-bg-index { display: none; }
+      .hero-eyebrow  { font-size: 9px; letter-spacing: 0.12em; margin-bottom: 18px; }
+      .hero-title    { font-size: clamp(38px, 11vw, 56px); }
+      .hero-client   { font-size: clamp(20px, 6.5vw, 30px); margin-bottom: 36px; }
+
+      .hero-meta { flex-direction: column; row-gap: 0; padding-top: 0; border-top: none; }
+
+      .hero-meta-item {
+        flex-direction: row;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 0;
+        margin: 0;
+        border-right: none;
+        border-top: 1px solid var(--g400);
+      }
+
+      .stats-inner {
+        grid-template-columns: 1fr 1fr;
+        padding: 36px var(--pad);
+        gap: 0;
+      }
+
+      .stat { border-right: none !important; border-bottom: none !important; padding: 0 !important; }
+      .stat:nth-child(odd)  { padding-right: 16px !important; border-right: 1px solid var(--g400) !important; }
+      .stat:nth-child(even) { padding-left: 16px !important; }
+      .stat:nth-child(-n+4) { padding-bottom: 24px !important; border-bottom: 1px solid var(--g400) !important; }
+      .stat:nth-child(n+3)  { padding-top: 24px !important; }
+      .stat:last-child {
+        grid-column: 1 / -1;
+        border-right: none !important;
+        padding: 24px 0 0 !important;
+        border-bottom: none !important;
+      }
+
+      .comp-inner  { padding: 24px var(--pad); gap: 8px; }
+      .comp-rule   { display: none; }
+      .comp-label  { width: 100%; }
+
+      .feature     { padding: 56px 0; }
+      .feature-grid { gap: 32px; }
+      .f-heading   { font-size: clamp(22px, 7vw, 30px); }
+      .f-body      { font-size: 14px; }
+      .f-pull      { margin-top: 20px; padding: 14px 16px; }
+      .f-pull p    { font-size: 12.5px; }
+
+      .impact { padding: 56px 0; }
+      .section-heading { font-size: clamp(26px, 8vw, 36px); margin-bottom: 32px; }
+
+      .reflection  { padding: 56px 0; }
+      .reflect-grid { grid-template-columns: 1fr; }
+      .reflect-cell { padding: 30px 20px; }
+      .rc-title     { font-size: 17px; }
+      .rc-body      { font-size: 13px; }
+
+      .closer { padding: 64px 0 56px; }
+      .closer-statement { font-size: clamp(16px, 5.5vw, 22px); }
+      .closer-byline {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 40px;
+      }
+      .byline-sep { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-name">Ryan Lartey</a>
+  <a href="/" class="nav-back">← Portfolio</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-bg-index">02</span>
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Applied PM Traineeship &nbsp;·&nbsp; PRINCE2 Framework</p>
+    <h1 class="hero-title">Waterfall<br>Infrastructure<br>Delivery</h1>
+    <p class="hero-client">Olympic Programme — Paris</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Role</span>
+        <span class="hero-meta-value">Project Manager</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Framework</span>
+        <span class="hero-meta-value">PRINCE2 · Waterfall</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Delivery</span>
+        <span class="hero-meta-value">Dual Sub-Project Programme</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Sector</span>
+        <span class="hero-meta-value">Infrastructure / Events</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Artefacts</span>
+        <span class="hero-meta-value">14 Deliverables</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-band">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-n large">2</div>
+      <div class="stat-lbl">Sub-Projects<br>Managed in Parallel</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n large">14</div>
+      <div class="stat-lbl">PM Artefacts<br>Produced</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n large">17</div>
+      <div class="stat-lbl">Risks &amp; Issues<br>Formally Managed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n large">10</div>
+      <div class="stat-lbl">Priority Actions<br>Logged &amp; Owned</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n word">AMBER<br>→ Escalated</div>
+      <div class="stat-lbl">RAG Trajectory<br>Resource: Red · Timelines: Amber</div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPETENCIES -->
+<section class="comp-band">
+  <div class="comp-inner">
+    <span class="comp-label">PM Competencies</span>
+    <div class="comp-rule"></div>
+    <span class="tag">Project Planning &amp; Critical Path</span>
+    <span class="tag">Risk Identification &amp; Scoring</span>
+    <span class="tag">Issue Escalation &amp; Resolution</span>
+    <span class="tag">Budget Management</span>
+    <span class="tag">Resource Gap Analysis</span>
+    <span class="tag">RAG Status Reporting</span>
+    <span class="tag">Stakeholder Governance</span>
+    <span class="tag">Action Prioritisation</span>
+  </div>
+</section>
+
+<!-- FEATURE 01 — Planning -->
+<section class="feature">
+  <div class="wrap">
+    <div class="feature-grid">
+      <div class="feat-txt">
+        <p class="f-label">01 — Planning</p>
+        <h2 class="f-heading">Mapping what the plan was missing before anything else</h2>
+        <p class="f-body">The first artefact wasn't a Gantt chart — it was a structured audit of what the existing Gantt charts were missing. Before any delivery work could begin, the plan needed to reflect reality: six milestones absent from HotelO24 and four from the Gymnasium, each with a rationale tied to source documentation.</p>
+        <p class="f-body">Missing entries included the Rooftop Terrace Safety Check (already overdue by Month 6), IOC Marketing Approval (needed by Month 7 to protect launch), Staff Induction Visit (Month 8, time-locked to construction access), and Design Adjustments for two newly scoped gymnastics events added late by the Gym Committee.</p>
+        <p class="f-body">Each gap was traced to a source document and assigned a target completion month that protected the critical path. Dependencies were mapped explicitly — if the terrace cert slipped past Month 6, the IOC legal agreement in Month 8 was directly at risk. That chain needed to be visible before construction entered its final phase.</p>
+        <div class="f-pull">
+          <p>Waterfall means late changes are expensive. Catching them here, in the planning artefact, made them manageable. The discipline is in auditing the plan before committing to it.</p>
+        </div>
+        <div class="f-tags">
+          <span class="f-tag">Gantt Analysis</span>
+          <span class="f-tag">Critical Path</span>
+          <span class="f-tag">Milestone Mapping</span>
+          <span class="f-tag">Dependency Tracking</span>
+        </div>
+      </div>
+      <div class="feat-img">
+        <!--
+          ★ IMAGE 1
+          Document: "(1a) PROJECT PLANNING + RATIONALE (WP).pdf"
+          Capture: Page 1, zoom ~120%. Show heading "1 – PROJECT PLANNING",
+                   subheading "Missing Key Milestones – HotelO24:", first 3 bullet blocks.
+          Dims: 536 × 400px (capture at 2× = 1072 × 800px)
+          Clickable: YES → download PDF
+          To activate: wrap img in <a href="path/to/(1a)..." download class="pdf-link">
+        -->
+        <div class="img-ph" style="aspect-ratio:536/400;">
+          <p class="ph-star">★ IMAGE 1</p>
+          <p class="ph-doc">
+            <strong>File:</strong> (1a) PROJECT PLANNING + RATIONALE (WP).pdf<br>
+            <strong>Page:</strong> Page 1, zoom 120%<br>
+            <strong>Show:</strong> "Missing Key Milestones – HotelO24" heading + first 3 bullet blocks<br>
+            <strong>Clickable:</strong> Yes → download PDF
+          </p>
+          <span class="ph-dims">536 × 400px</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 02 — Risk & Issues (image left) -->
+<section class="feature">
+  <div class="wrap">
+    <div class="feature-grid img-first">
+      <div class="feat-img">
+        <!--
+          ★ IMAGE 2
+          Document: "1b, 3, 4, 9 (WP).xlsx"
+          Sheet: Risk Log tab
+          Show: Column headers + all populated rows. Impact Rating and Likelihood Rating columns visible.
+          Dims: 536 × 340px (capture at 2× = 1072 × 680px)
+          Clickable: YES → download .xlsx
+        -->
+        <div class="img-ph" style="aspect-ratio:536/340;">
+          <p class="ph-star">★ IMAGE 2</p>
+          <p class="ph-doc">
+            <strong>File:</strong> 1b, 3, 4, 9 (WP).xlsx — Risk Log tab<br>
+            <strong>Show:</strong> All headers + all rows. Impact &amp; Likelihood columns visible.<br>
+            <strong>Crop:</strong> Header → last risk row. No blank rows.<br>
+            <strong>Clickable:</strong> Yes → download .xlsx
+          </p>
+          <span class="ph-dims">536 × 340px</span>
+        </div>
+      </div>
+      <div class="feat-txt">
+        <p class="f-label">02 — Risk &amp; Issues</p>
+        <h2 class="f-heading">Eight risks.<br>Nine issues.<br>Every one owned, rated, and targeted.</h2>
+        <p class="f-body">Each entry was sourced explicitly — from a surveyor's report, an operations email, a Gantt dependency, or a stakeholder request — and scored on a 5-point impact × likelihood matrix. The logs were maintained across both sub-projects, with distinct entries for shared dependencies like the Site Manager vacancy.</p>
+        <p class="f-body">The highest-rated issue (I001, Impact 5 / Likelihood 4) was the missed Rooftop Terrace safety certificate — a legal risk with the hotel chain threatening to invoke contractual clauses. R003, the Site Manager resignation, was scored Likelihood 5 because it had already happened. That distinction — risk versus confirmed issue — shaped how each was escalated and owned.</p>
+        <p class="f-body">Brexit-related gym equipment delays, the unbudgeted virtual tour, and missing UK/China team requirements all entered the logs before they could become launch blockers. The discipline is in logging early, not after the damage is done.</p>
+        <div class="f-tags">
+          <span class="f-tag">Risk Register</span>
+          <span class="f-tag">Issue Log</span>
+          <span class="f-tag">Impact × Likelihood</span>
+          <span class="f-tag">Escalation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 03 — RAG Reporting -->
+<section class="feature">
+  <div class="wrap">
+    <div class="feature-grid">
+      <div class="feat-txt">
+        <p class="f-label">03 — Reporting</p>
+        <h2 class="f-heading">RAG reporting built from evidence, not assumption</h2>
+        <p class="f-body">Both Highlight Reports were produced on the same date, giving the Programme Sponsor a consolidated picture of programme health. HotelO24 returned Amber Overall — triggered by more than one Amber sub-category and a Red Resource flag. The Gymnasium returned Amber across Scope, Resource, and Timelines, with Costs as the only Green.</p>
+        <p class="f-body">Each RAG rating was justified against the definitions table in the report template — not applied subjectively. Resource was Red for HotelO24 because the Site Manager had resigned with no replacement in place: "Resource not in place / roles not identified / impact on ability to deliver." That's a Red by definition, and it was flagged as one.</p>
+        <p class="f-body">Alongside the Highlight Reports, a structured monthly update was sent to the Paralympics Programme Office in Lyon — covering accessibility readiness, equipment delivery risks, layout changes, and coordination status. Different stakeholder, different format, same rigour.</p>
+        <div class="f-pull">
+          <p>An honest report, not a managed one. The Red Resource flag triggered a board-level approval request for an interim contractor. That decision could only be made if the report reflected reality.</p>
+        </div>
+        <div class="f-tags">
+          <span class="f-tag">RAG Reporting</span>
+          <span class="f-tag">Highlight Reports</span>
+          <span class="f-tag">Programme Status</span>
+          <span class="f-tag">External Comms</span>
+        </div>
+      </div>
+      <div class="feat-img">
+        <!--
+          ★ IMAGE 3
+          Document: "(6a) Project Status Report (WP).pdf"
+          Page: 1 — HotelO24 Highlight Report, zoom ~110%
+          Show: RAG Status row (Overall/Scope/Resource/Timelines/Costs) + Progress Update bullets + Escalated Issues section
+          Dims: 536 × 680px (capture at 2× = 1072 × 1360px)
+          Clickable: YES → download PDF
+        -->
+        <a href="./Project-Status-Report-WP.pdf" download class="pdf-link">
+          <div class="img-ph" style="aspect-ratio:536/680; width:100%;">
+            <p class="ph-star">★ IMAGE 3 — CLICKABLE PDF</p>
+            <p class="ph-doc">
+              <strong>File:</strong> (6a) Project Status Report (WP).pdf<br>
+              <strong>Page:</strong> Page 1, zoom 110%<br>
+              <strong>Show:</strong> RAG Status row + Progress Update + Escalated Issues<br>
+              Replace this div with &lt;img&gt; inside the &lt;a class="pdf-link"&gt;
+            </p>
+          </div>
+          <div class="pdf-badge">↓ PDF</div>
+          <div class="pdf-hover">Download Status Report</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 04 — Governance (image left) -->
+<section class="feature">
+  <div class="wrap">
+    <div class="feature-grid img-first">
+      <div class="feat-img">
+        <!--
+          ★ IMAGE 4
+          Document: "(8) Team Structure & Governance (WP).pdf"
+          Capture: Full page. Both org trees visible — HotelO24 and Gymnasium.
+                   Both headings must appear.
+          Dims: 536 × 400px (capture at 2× = 1072 × 800px)
+          Clickable: YES → download PDF
+        -->
+        <div class="img-ph" style="aspect-ratio:536/400;">
+          <p class="ph-star">★ IMAGE 4</p>
+          <p class="ph-doc">
+            <strong>File:</strong> (8) Team Structure &amp; Governance (WP).pdf<br>
+            <strong>Show:</strong> Full page. Both org trees (HotelO24 + Gymnasium) visible.<br>
+            Both section headings must appear.<br>
+            <strong>Clickable:</strong> Yes → download PDF
+          </p>
+          <span class="ph-dims">536 × 400px</span>
+        </div>
+      </div>
+      <div class="feat-txt">
+        <p class="f-label">04 — Governance</p>
+        <h2 class="f-heading">A clear chain of accountability for a programme under pressure</h2>
+        <p class="f-body">The governance structure wasn't inherited — it was defined. Programme Sponsor held ultimate funding and strategic authority. The PM sat directly below, accountable for all planning and stakeholder management across both sub-projects. Operations Manager, Design Lead, and Tech Lead each reported to the PM, with the Site Manager (VACANT) flagged explicitly in both org charts.</p>
+        <p class="f-body">Each role was traced to a source document with rationale for its position. The Design Lead rolling off Q2 and the Tech Lead dropping to 50% from Q3 were both flagged as delivery risks — not just org chart facts. Naming the vacancy wasn't procedural; it was what justified the contingency draw request to the board.</p>
+        <p class="f-body">Stakeholders — Hotel Manager, IOC Legal, IOC Comms, Gym Committee, Paralympics Programme Office, and 18+ National Teams — were documented separately from the delivery team, with their influence and information needs mapped against the comms strategy.</p>
+        <div class="f-tags">
+          <span class="f-tag">Org Design</span>
+          <span class="f-tag">RACI</span>
+          <span class="f-tag">Escalation Chain</span>
+          <span class="f-tag">Stakeholder Mapping</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE 05 — Budget & Stakeholders -->
+<section class="feature">
+  <div class="wrap">
+    <div class="feature-grid">
+      <div class="feat-txt">
+        <p class="f-label">05 — Budget &amp; Stakeholder Management</p>
+        <h2 class="f-heading">Budget gaps surfaced.<br>Stakeholders managed directly.</h2>
+        <p class="f-body">The budget artefact identified six items not costed in the existing resource budget: a replacement Site Manager (contractor rates likely £5–6k/month vs. the budgeted £3k), rooftop terrace certification work, marketing and communications support, virtual tour production, post-Games hotel conversion planning, and full contingency justification for each. The €1.5m residential conversion cost was the most significant unplanned exposure.</p>
+        <p class="f-body">Stakeholder management was handled through structured written communication. The email to the Hotel Manager addressed four open issues directly — terrace certification, IOC legal status, marketing material approval, and induction site access in Month 8 — with a clear position and next action on each. No ambiguity, no deflection.</p>
+        <div class="f-pull">
+          <p>The contingency fund (£688,425 — 10% of resource budget) was formally justified for three specific draws: Site Manager replacement, virtual tour delivery, and initial terrace compliance work. Additional funding routes via Tech Lead reallocation and IOC central comms were also identified.</p>
+        </div>
+        <div class="f-tags">
+          <span class="f-tag">Budget Analysis</span>
+          <span class="f-tag">Contingency Planning</span>
+          <span class="f-tag">Stakeholder Comms</span>
+          <span class="f-tag">Written Governance</span>
+        </div>
+      </div>
+      <div class="feat-img">
+        <!--
+          ★ IMAGE 5
+          Document: "(7) MANAGING STAKEHOLDERS (WP).pdf"
+          Capture: Full page. Email to Hotel Manager, browser at 80% zoom.
+                   Show To/From/Subject + all four reply sections:
+                   Build Timeline & Terrace Safety / IOC Legal Agreement /
+                   Marketing Materials / Induction Site Visit.
+          Dims: 536 × 680px (capture at 2× = 1072 × 1360px)
+          Clickable: YES → download PDF
+        -->
+        <a href="./Managing-Stakeholders-WP.pdf" download class="pdf-link">
+          <div class="img-ph" style="aspect-ratio:536/680; width:100%;">
+            <p class="ph-star">★ IMAGE 5 — CLICKABLE PDF</p>
+            <p class="ph-doc">
+              <strong>File:</strong> (7) MANAGING STAKEHOLDERS (WP).pdf<br>
+              <strong>Zoom:</strong> 80% to fit full email<br>
+              <strong>Show:</strong> To/From/Subject + all 4 reply sections<br>
+              Replace this div with &lt;img&gt; inside the &lt;a class="pdf-link"&gt;
+            </p>
+          </div>
+          <div class="pdf-badge">↓ PDF</div>
+          <div class="pdf-hover">Download Stakeholder Email</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT TABLE -->
+<section class="impact">
+  <div class="wrap">
+    <p class="section-eyebrow">Artefact Suite</p>
+    <h2 class="section-heading">Purpose and outcome<br>of each deliverable.</h2>
+    <div class="tbl-scroll">
+      <table class="itbl">
+        <thead>
+          <tr>
+            <th style="width:16%;">Artefact</th>
+            <th style="width:28%;">Purpose</th>
+            <th style="width:56%;">Outcome / Decision Enabled</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="area">Project Planning<span class="ref">1a · 1b</span></td>
+            <td>Critical path mapping, milestone gap analysis, sub-project task rationale</td>
+            <td class="outcome">8 missing milestones identified across both sub-projects before delivery began</td>
+          </tr>
+          <tr>
+            <td class="area">Budget<span class="ref">2</span></td>
+            <td>Identify uncosted items, justify contingency draws, surface funding routes</td>
+            <td class="outcome">€1.5m shortfall flagged; three contingency draws justified; Tech Lead savings identified as reallocation source</td>
+          </tr>
+          <tr>
+            <td class="area">Risk Management<span class="ref">3</span></td>
+            <td>Proactive risk identification with impact × likelihood scoring</td>
+            <td class="outcome">8 risks formally managed; highest-rated escalated to legal and programme level</td>
+          </tr>
+          <tr>
+            <td class="area">Issue Management<span class="ref">4</span></td>
+            <td>Live issue tracking with owners, impact ratings, and target dates</td>
+            <td class="outcome">9 issues owned and targeted; I001 (terrace cert, Impact 5) escalated to board</td>
+          </tr>
+          <tr>
+            <td class="area">Resource Management<span class="ref">5</span></td>
+            <td>Identify critical resource gaps and actions to resolve them</td>
+            <td class="outcome">6 gaps addressed including Site Manager vacancy, Design Lead retention, Tech Lead backfill</td>
+          </tr>
+          <tr>
+            <td class="area">RAG Highlight Reports<span class="ref">6a</span></td>
+            <td>Consolidated programme status reporting for Programme Sponsor</td>
+            <td class="outcome">Red Resource flag triggered board-level approval request for interim contractor</td>
+          </tr>
+          <tr>
+            <td class="area">Paralympics Report<span class="ref">6b</span></td>
+            <td>External governance reporting to Paralympics Programme Office, Lyon</td>
+            <td class="outcome">Accessibility readiness, equipment risks, and layout changes formally communicated</td>
+          </tr>
+          <tr>
+            <td class="area">Stakeholder Email<span class="ref">7</span></td>
+            <td>Structured written response to Hotel Manager's four open issues</td>
+            <td class="outcome">Terrace, IOC legal, marketing, and induction items acknowledged with next actions</td>
+          </tr>
+          <tr>
+            <td class="area">Team Governance<span class="ref">8</span></td>
+            <td>Define reporting lines, flag vacancies, document stakeholder vs. delivery roles</td>
+            <td class="outcome">VACANT Site Manager formally documented; escalation chain defined across both sub-projects</td>
+          </tr>
+          <tr>
+            <td class="area">PM Action Log<span class="ref">9</span></td>
+            <td>Priority-ranked actions with owners, sources, and rationale</td>
+            <td class="outcome">10 actions tracked; high/medium priority distinguished; escalation routes defined per action</td>
+          </tr>
+          <tr>
+            <td class="area">Communications<span class="ref">10</span></td>
+            <td>Improve comms structure across team and with external stakeholders</td>
+            <td class="outcome">4 structural recommendations: weekly stand-up, shared dashboard, external summaries, Comms Lead</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- REFLECTION GRID -->
+<section class="reflection">
+  <div class="wrap">
+    <p class="section-eyebrow">PM Reflection</p>
+    <h2 class="section-heading">What this project<br>demanded as a practitioner.</h2>
+    <div class="reflect-grid">
+      <div class="reflect-cell">
+        <p class="rc-label">The Core Discipline</p>
+        <h3 class="rc-title">Waterfall under pressure</h3>
+        <p class="rc-body">When the Gym Committee added two events mid-delivery, the response wasn't to absorb it quietly — it was to assess the dependency chain, update the plan, flag the Design Lead extension risk, and log it formally as a scope change with downstream impact on layouts, procurement, and construction. In waterfall, you cannot close a phase until its outputs are confirmed. That discipline holds even when the brief changes.</p>
+      </div>
+      <div class="reflect-cell">
+        <p class="rc-label">What I Got Right</p>
+        <h3 class="rc-title">Escalation judgement</h3>
+        <p class="rc-body">Not every problem goes to the Programme Sponsor. The terrace certification (legal exposure, Impact 5) and the €1.5m conversion gap needed board-level decisions. Marketing approval delays and induction access did not — those were operational, owned and managed at PM level. Knowing the difference is not a process question; it's a judgement call, and it shapes how governance time gets spent.</p>
+      </div>
+      <div class="reflect-cell">
+        <p class="rc-label">What This Demonstrates</p>
+        <h3 class="rc-title">Multiple stakeholder registers simultaneously</h3>
+        <p class="rc-body">Across both projects, eight distinct stakeholder groups required different information at different frequencies. The Programme Sponsor received formal RAG reports, the Hotel Manager received a direct written response to four open issues, and the Paralympics Office in Lyon received a monthly accessibility update with its own structure and tone. One PM, one programme, eight audiences — all requiring accurate, timely, appropriately formatted communication.</p>
+      </div>
+      <div class="reflect-cell">
+        <p class="rc-label">What I'd Build On</p>
+        <h3 class="rc-title">Evidence-based risk thinking</h3>
+        <p class="rc-body">Every risk and issue in the logs was sourced — tied to a specific document, email, or data point, with the exact reference noted in the rationale. That discipline matters because it's what makes a risk log useful in a governance review, not just a formality. When R003 was scored Likelihood 5, it was because it had already happened — and that distinction needed to be explicit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSER -->
+<section class="closer">
+  <div class="wrap">
+    <div class="closer-inner">
+      <p class="closer-label">Closing Statement</p>
+      <p class="closer-statement">
+        This project demanded the ability to hold a full programme under a single governance structure — two sub-projects running simultaneously, each with distinct stakeholders, live escalations, and a deadline that could not flex. <em>It demonstrates structured PM thinking: not just producing artefacts, but understanding what decision each one enables and what happens if it's missing.</em>
+        <br><br>
+        Every document produced across this artefact suite — each one grounded in source-evidenced rationale — holds up to scrutiny in a real governance review. The standard I hold my PM work to is this: every document should make the project easier to deliver, not harder to read.
+      </p>
+      <div class="closer-byline">
+        <strong>Ryan Lartey</strong>
+        <span class="byline-sep">·</span>
+        <span class="byline-tag">PRINCE2 Foundation</span>
+        <span class="byline-tag">AgilePM Foundation</span>
+        <span class="byline-tag">Applied PM Traineeship</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
