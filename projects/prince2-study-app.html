@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRINCE2 Master — Case Study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f4f0;
+      --grey-1: #1a1a1a;
+      --grey-2: #2a2a2a;
+      --grey-3: #444;
+      --grey-4: #888;
+      --grey-5: #bbb;
+      --accent: #e8e4dc;
+      --rule: rgba(255,255,255,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 24px 48px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, transparent 100%);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--grey-5);
+      text-decoration: none;
+    }
+    .nav-back {
+      font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--grey-4); text-decoration: none;
+      border: 1px solid var(--grey-2); padding: 8px 18px; border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .nav-back:hover { color: var(--white); border-color: var(--grey-3); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 48px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-img-placeholder {
+      position: absolute; inset: 0;
+      background: var(--grey-1);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 12px;
+    }
+    /* ★ IMAGE 1: Full-screen hero — Screenshot of the PRINCE2 Master home screen showing the predicted exam score (large figure, centre-screen), the readiness sparkline trend chart, the 11 topic mastery bars, and the daily practice goal progress bar. Capture at a moment where the score reads something impressive — e.g. 54/60. */
+    .hero-img-placeholder::after {
+      content: "★ IMAGE 1\APRINCE2 Master — Home screen\APredicted score + topic mastery bars + sparkline trend\ACapture with a strong predicted score visible (e.g. 54/60)";
+      white-space: pre;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; color: var(--grey-3);
+      text-align: center; line-height: 1.8;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,1) 0%, rgba(10,10,10,0.6) 50%, rgba(10,10,10,0.2) 100%);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 860px; }
+    .hero-tag {
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--grey-4); margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-tag::before {
+      content: ''; display: block; width: 32px; height: 1px; background: var(--grey-3);
+    }
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(48px, 7vw, 96px); font-weight: 800;
+      line-height: 0.95; letter-spacing: -0.03em;
+      margin-bottom: 32px;
+    }
+    .hero-title em { font-style: italic; font-weight: 400; color: var(--grey-4); }
+    .hero-meta {
+      display: flex; gap: 40px; flex-wrap: wrap;
+    }
+    .meta-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-4); margin-bottom: 4px; }
+    .meta-value { font-size: 14px; color: var(--grey-5); }
+
+    /* ── SECTIONS ── */
+    section { padding: 100px 48px; border-top: 1px solid var(--rule); }
+    .section-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--grey-3);
+      margin-bottom: 56px;
+    }
+
+    /* ── PROBLEM ── */
+    .problem-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+    .problem-left h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(32px, 4vw, 52px); font-weight: 700;
+      line-height: 1.05; letter-spacing: -0.02em;
+      margin-bottom: 32px;
+    }
+    .problem-left h2 em { font-style: italic; font-weight: 400; color: var(--grey-4); }
+    .problem-left p { color: var(--grey-5); font-size: 16px; line-height: 1.8; margin-bottom: 20px; }
+    .risk-list { list-style: none; margin-top: 40px; }
+    .risk-list li {
+      padding: 16px 0; border-top: 1px solid var(--rule);
+      font-size: 14px; color: var(--grey-5); display: flex; gap: 16px; align-items: flex-start;
+    }
+    .risk-list li:last-child { border-bottom: 1px solid var(--rule); }
+    .risk-num {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      color: var(--grey-3); letter-spacing: 0.1em; padding-top: 3px; min-width: 24px;
+    }
+
+    /* IMAGE PLACEHOLDER */
+    .img-placeholder {
+      background: var(--grey-1); border: 1px solid var(--grey-2);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; padding: 40px; text-align: center;
+      border-radius: 2px;
+    }
+    .img-placeholder-label {
+      font-size: 12px; color: var(--grey-3); line-height: 1.8;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .img-placeholder-title {
+      font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-2);
+      margin-bottom: 8px;
+    }
+
+    /* ── STATS BAND ── */
+    .stats-band {
+      padding: 0 48px; border-top: 1px solid var(--rule);
+    }
+    .stats-inner {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-left: 1px solid var(--rule);
+    }
+    .stat-block {
+      padding: 56px 40px; border-right: 1px solid var(--rule);
+    }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(36px, 4vw, 60px); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1;
+      margin-bottom: 10px;
+    }
+    .stat-desc { font-size: 13px; color: var(--grey-4); line-height: 1.5; }
+
+    /* ── HOW IT WORKS ── */
+    .workflow-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .step {
+      display: flex; gap: 24px; padding: 28px 0; border-top: 1px solid var(--rule);
+    }
+    .step:last-child { border-bottom: 1px solid var(--rule); }
+    .step-num {
+      font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+      color: var(--grey-3); letter-spacing: 0.1em; padding-top: 4px; min-width: 28px;
+    }
+    .step-body h4 {
+      font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+      letter-spacing: 0.05em; margin-bottom: 6px;
+    }
+    .step-body p { font-size: 14px; color: var(--grey-5); line-height: 1.7; }
+
+    /* ── FEATURES ── */
+    .feature-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      align-items: center; padding: 80px 48px;
+      border-top: 1px solid var(--rule);
+    }
+    .feature-row.reverse { direction: rtl; }
+    .feature-row.reverse > * { direction: ltr; }
+    .feature-text h3 {
+      font-family: 'Syne', sans-serif; font-size: clamp(24px, 3vw, 38px);
+      font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 20px;
+    }
+    .feature-text h3 em { font-style: italic; font-weight: 400; color: var(--grey-4); }
+    .feature-text p { font-size: 15px; color: var(--grey-5); line-height: 1.8; margin-bottom: 16px; }
+    .feature-tag {
+      display: inline-block; font-size: 10px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--grey-4); border: 1px solid var(--grey-2);
+      padding: 6px 12px; border-radius: 2px; margin-bottom: 20px;
+    }
+    .feature-img { aspect-ratio: 4/3; }
+
+    /* ── IMPACT ── */
+    .impact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+    .impact-left h2 {
+      font-family: 'Syne', sans-serif; font-size: clamp(32px, 4vw, 52px);
+      font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 32px;
+    }
+    .impact-left h2 em { font-style: italic; font-weight: 400; color: var(--grey-4); }
+    .impact-left p { font-size: 15px; color: var(--grey-5); line-height: 1.8; margin-bottom: 20px; }
+    .impact-table { width: 100%; border-collapse: collapse; }
+    .impact-table th {
+      font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--grey-3); font-weight: 700; text-align: left;
+      padding: 12px 0; border-bottom: 1px solid var(--grey-2);
+    }
+    .impact-table td {
+      font-size: 14px; padding: 16px 0; border-bottom: 1px solid var(--rule);
+      color: var(--grey-5); vertical-align: top;
+    }
+    .impact-table td:first-child { color: var(--white); padding-right: 24px; }
+    .impact-table td:last-child { color: #7dba84; }
+
+    /* ── REFLECTION ── */
+    .reflection-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px;
+      background: var(--grey-2); border: 1px solid var(--grey-2); margin-top: 56px;
+    }
+    .reflection-item {
+      background: var(--black); padding: 48px 36px;
+    }
+    .reflection-item h4 {
+      font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .reflection-item p { font-size: 14px; color: var(--grey-4); line-height: 1.7; }
+
+    /* ── FOOTER ── */
+    .case-footer {
+      padding: 80px 48px; border-top: 1px solid var(--rule);
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .footer-note { font-size: 13px; color: var(--grey-3); max-width: 400px; line-height: 1.7; }
+    .footer-cta {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--white); text-decoration: none;
+      border-bottom: 1px solid var(--grey-3); padding-bottom: 4px;
+      transition: border-color 0.2s;
+    }
+    .footer-cta:hover { border-color: var(--white); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(32px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-content > * {
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .hero-tag { animation-delay: 0.1s; }
+    .hero-title { animation-delay: 0.2s; }
+    .hero-meta { animation-delay: 0.35s; }
+
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .hero { padding: 0 24px 60px; }
+      section { padding: 72px 24px; }
+      .stats-band { padding: 0 24px; }
+      .feature-row { padding: 60px 24px; grid-template-columns: 1fr; gap: 40px; }
+      .feature-row.reverse { direction: ltr; }
+      .problem-grid, .workflow-grid, .impact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .stats-inner { grid-template-columns: 1fr 1fr; }
+      .reflection-grid { grid-template-columns: 1fr; }
+      .case-footer { flex-direction: column; gap: 32px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo">Ryan Lartey</a>
+    <a href="/portfolio" class="nav-back">← Portfolio</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-img-placeholder"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Personal Project &nbsp;·&nbsp; React &nbsp;·&nbsp; Anthropic Claude API &nbsp;·&nbsp; Replit</div>
+      <h1 class="hero-title">
+        PRINCE2<br/>
+        <em>Master</em>
+      </h1>
+      <div class="hero-meta">
+        <div class="meta-item">
+          <div class="meta-label">Role</div>
+          <div class="meta-value">Self-Initiated — Product Owner, Builder & PM</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Duration</div>
+          <div class="meta-value">1 week — concept to exam-ready</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Stack</div>
+          <div class="meta-value">React · Node.js · Claude API · Replit</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Outcome</div>
+          <div class="meta-value">PRINCE2 Foundation — Passed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM -->
+  <section>
+    <div class="section-num">01 — The Problem</div>
+    <div class="problem-grid">
+      <div class="problem-left">
+        <h2>Every prep tool<br/><em>was the wrong tool</em></h2>
+        <p>The PeopleCert PRINCE2 Foundation exam is not a memory test. It is a 60-question, 60-minute applied reasoning paper written to exploit the specific gaps between studying PRINCE2 and actually understanding it. Generic flashcard apps could not replicate that.</p>
+        <p>The existing tools — ILX simulator, static question banks — either recycled the same questions until they were memorised by pattern rather than understood, or drilled low-value recall without targeting the confusion pairs that cost candidates 10 to 15 marks in the real exam.</p>
+        <ul class="risk-list">
+          <li><span class="risk-num">01</span> No tool mapped questions to the 48 official PeopleCert v7 learning outcomes — blind spots went undetected until the exam</li>
+          <li><span class="risk-num">02</span> Static question banks rewarded pattern recognition, not concept mastery — right answers for the wrong reasons</li>
+          <li><span class="risk-num">03</span> No weighted readiness tracking — it was impossible to know which weak topics would cost the most marks on exam day</li>
+          <li><span class="risk-num">04</span> No wrong-answer recycling — questions answered incorrectly simply returned to the pool, unaddressed</li>
+          <li><span class="risk-num">05</span> No tool targeted the 30+ known PRINCE2 confusion pairs — the exact traps that separate a 46 from a 56</li>
+        </ul>
+      </div>
+      <div>
+        <!-- ★ IMAGE 2: Screenshot of the ILX exam simulator results screen showing a mid-range score (e.g. 44/60 or similar), with the per-topic breakdown visible — ideally showing red or amber areas in People or Processes. This is the "before" state: a score that reveals the gap the app was built to close. Alternatively, a side-by-side of the ILX interface vs the PRINCE2 Master interface, showing the contrast in depth. -->
+        <div class="img-placeholder" style="aspect-ratio: 3/4;">
+          <div class="img-placeholder-title">★ Image 2</div>
+          <div class="img-placeholder-label">ILX exam simulator results screen<br/>showing a mid-range score with per-topic breakdown<br/>The "before" — revealing the exact gaps the app was built to close</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAND -->
+  <div class="stats-band">
+    <div class="stats-inner">
+      <div class="stat-block">
+        <div class="stat-num">60</div>
+        <div class="stat-desc">Questions in full exam simulation<br/>under real timed conditions</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">11</div>
+        <div class="stat-desc">PRINCE2 topics covered<br/>across the complete v7 syllabus</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">48</div>
+        <div class="stat-desc">Official PeopleCert learning outcomes<br/>tracked in the Syllabus Coverage Map</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">7</div>
+        <div class="stat-desc">Study modes built<br/>for every preparation scenario</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PM COMPETENCIES BAND -->
+  <section style="padding: 72px 48px; border-top: 1px solid var(--rule);">
+    <div class="section-num">PM Competencies Demonstrated</div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--grey-2); border: 1px solid var(--grey-2); margin-top: 0;">
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Problem Identification</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">Identified the specific failure mode of existing prep tools — pattern recognition without understanding — and defined the requirement gap before building anything. A PM identifies what is missing before proposing a solution.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Requirements Engineering</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">Mapped the PeopleCert mark scheme, identified the 30 known confusion pairs, and reverse-engineered the BL1/BL2 difficulty split to define the question generation requirements before writing a prompt or a line of code.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Scope & Iteration</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">Started with a working drill tool and expanded to seven modes through structured iteration — each addition triggered by a specific identified gap, not by feature creep. Every change was a controlled scope decision.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Risk Management</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">API cost exposure was a live project risk. Mitigated through a server-side proxy, a capped Wrong Bank, and conservative token budgets. Risk was identified, assessed, and controlled — not discovered after the fact.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Governance & Access Control</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">A password-protected entry screen and a server-side API key proxy were built before the app was shared as a portfolio asset. Governance was not an afterthought — it was a deployment gate.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Technical Delivery</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">Debugged multi-select validation logic, resolved Claude-specific API dependencies for Replit deployment, and built a full server-side proxy to replace client-side API calls — hands-on technical ownership from build through to production.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Quality Assurance</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">Every AI-generated question passed a self-check against PeopleCert's question-writing rules — no keyword mirroring, no obvious distractors, unambiguous correct answers. Quality criteria were defined before testing began, not during it.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Benefits Realisation</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">The tool was not the objective. Passing the exam was. The calibrated score prediction, the weighted readiness model, and the syllabus coverage map all existed to drive one measurable outcome — which was achieved.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUILD & ITERATION -->
+  <section>
+    <div class="section-num">02 — Build & Iteration</div>
+    <div class="workflow-grid">
+      <div class="workflow-steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <h4>Define the Requirements</h4>
+            <p>Before any code: mapped the PeopleCert v7 mark scheme by topic weight, catalogued 30 known confusion pairs from ILX simulator results, and defined question quality criteria mirroring PeopleCert's own standards. The specification preceded the build.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <h4>Build the Core Engine</h4>
+            <p>Built the AI question generation pipeline first — system prompt engineering to enforce British English, v7 terminology, BL1/BL2 balance, and PeopleCert-style four-option structure. Topic Drill mode was the initial delivery. Everything else was built on top of a working engine.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <h4>Iterate on Identified Gaps</h4>
+            <p>Each iteration was triggered by a specific failure: wrong answers not being tracked led to the Wrong Bank and Priority Review; score optimism led to the 12% calibration deflation; blind spots in untested topics led to the 48-LO Syllabus Coverage Map. Every addition solved a real problem.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-body">
+            <h4>Debug & Harden</h4>
+            <p>Fixed faulty multi-select validation logic — including a Quality Assurance question with a contradictory answer key and an overconstrained multi-select that made correct answers impossible. Hardening was not cosmetic; it protected the integrity of the exam simulation.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">05</div>
+          <div class="step-body">
+            <h4>Deploy with Governance Controls</h4>
+            <p>Migrated from Claude-specific API dependencies to a Replit-compatible server-side proxy, protecting the API key from client exposure. Added a password screen for portfolio access. Deployed to production on a flat Replit hosting fee with zero ongoing API cost leakage.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ★ IMAGE 3: Screenshot of the Topic Drill interface mid-session — showing a "Which TWO" style question with four options, the answer radio buttons, and the detailed explanation panel below a submitted answer. Ideally captured with the explanation visible, showing the per-option breakdown ("Why A is wrong: …"). This is the core product in action. -->
+      <div class="img-placeholder" style="aspect-ratio: 3/4;">
+        <div class="img-placeholder-title">★ Image 3</div>
+        <div class="img-placeholder-label">Topic Drill mid-session<br/>"Which TWO" question with four options visible<br/>Explanation panel open below — showing per-option breakdown</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE ROW 1 — Exam Simulation & Mastery Engine -->
+  <div class="feature-row">
+    <!-- ★ IMAGE 4: Screenshot of the Full Exam Simulation end screen — showing the raw score (e.g. 54/60), the calibrated exam prediction, the pacing flag (if any questions exceeded 90 seconds), and the per-topic breakdown beneath. This is the highest-impact screen in the app and the most PM-credible image in the deck. -->
+    <div class="img-placeholder feature-img">
+      <div class="img-placeholder-title">★ Image 4</div>
+      <div class="img-placeholder-label">Full Exam Simulation results screen<br/>Raw score + calibrated prediction + per-topic breakdown<br/>Ideally showing a strong result — e.g. 54/60 raw, 48 calibrated</div>
+    </div>
+    <div class="feature-text">
+      <div class="feature-tag">Exam Simulation & Mastery Engine</div>
+      <h3>A mock exam that<br/><em>refuses to flatter you</em></h3>
+      <p>The Full Exam Simulation runs 60 questions in 60 minutes under real exam conditions — no mid-session answer reveals, no hints. At the end it reports a raw score, a calibrated exam prediction (raw score deflated by 12% to account for the gap between practice and real conditions), and flags any question that took over 90 seconds as a pacing risk.</p>
+      <p>The mastery engine weighs both accuracy and volume — 25 correct from 30 attempts is stronger evidence of mastery than 5 from 5, and the model reflects that. Topic mastery scores feed a readiness prediction weighted by the actual PeopleCert mark scheme: People and Processes at 15% each, Principles at 8%, down to Key Concepts. Improving in a high-weight topic moves your predicted score. Improving in a low-weight topic barely does.</p>
+    </div>
+  </div>
+
+  <!-- FEATURE ROW 2 — Coverage Map & Spaced Repetition -->
+  <div class="feature-row reverse">
+    <!-- ★ IMAGE 5: Screenshot of the Syllabus Coverage Map — showing the full grid of 48 PeopleCert v7 learning outcomes organised by topic, with some marked as covered (e.g. a tick or filled state) and some still untested (empty or greyed out), with a "Drill" button visible next to an untested LO. This is the most technically sophisticated screen and the strongest differentiator from generic flashcard apps. -->
+    <div class="img-placeholder feature-img">
+      <div class="img-placeholder-title">★ Image 5</div>
+      <div class="img-placeholder-label">Syllabus Coverage Map<br/>48 PeopleCert v7 learning outcomes — covered vs untested<br/>Drill button visible next to an untested LO</div>
+    </div>
+    <div class="feature-text">
+      <div class="feature-tag">Syllabus Coverage & Spaced Repetition</div>
+      <h3>No blind spot<br/><em>goes undetected</em></h3>
+      <p>The Syllabus Coverage Map tracks every answered question against all 48 official PeopleCert v7 Foundation learning outcomes using keyword matching against concept tags. For each of the 11 topics it shows exactly which LOs have been encountered and which remain untested. An untested LO is a blind spot — one that no amount of high mastery on covered concepts can compensate for on exam day. Each one has a direct Drill button to close the gap.</p>
+      <p>Wrong answers are stored in a capped Wrong Bank and recycled through Priority Review — surfaced in order of exam mark weight, then rewritten by the AI on the second attempt so the concept cannot be answered from memory. The system is deliberately unforgiving: it is designed to expose weakness, not to confirm what you already know.</p>
+    </div>
+  </div>
+
+  <!-- FEATURE ROW 3 — Governance & Deployment -->
+  <div class="feature-row">
+    <!-- ★ IMAGE 6: Two-panel screenshot. Left: the password entry screen as it appears when the app loads — minimal, clean, just a password field and submit button. Right: the Replit project view showing the server.js proxy file in the file tree, indicating the backend architecture. This demonstrates both the access governance and the technical deployment decision. -->
+    <div class="img-placeholder feature-img">
+      <div class="img-placeholder-title">★ Image 6</div>
+      <div class="img-placeholder-label">Two-panel: password screen (left)<br/>+ Replit server.js proxy visible in file tree (right)<br/>Demonstrates access governance + backend architecture</div>
+    </div>
+    <div class="feature-text">
+      <div class="feature-tag">Governance & API Cost Control</div>
+      <h3>Built for a portfolio,<br/><em>governed like a product</em></h3>
+      <p>Sharing an AI-powered app as a portfolio asset without access controls is an API cost exposure — every unauthorised visit burns tokens. A password screen was added as a deployment gate before the app was made publicly linkable. Access control was a risk decision, not an afterthought.</p>
+      <p>The server-side proxy was built to replace direct client-side API calls, removing the API key from the browser entirely. The Wrong Bank was capped at 50 entries to prevent unbounded state growth. Token budgets were set conservatively across all question generation calls. Cost governance was treated as a project constraint with the same discipline as a budget in a formal PM engagement.</p>
+    </div>
+  </div>
+
+  <!-- IMPACT -->
+  <section>
+    <div class="section-num">03 — Outcome</div>
+    <div class="impact-grid">
+      <div class="impact-left">
+        <h2>Built the tool.<br/><em>Passed the exam.</em></h2>
+        <p>The objective was never to build an app. It was to close the gap between knowing PRINCE2 and being able to apply it under exam conditions — a specific, measurable outcome with a clear deadline.</p>
+        <p>The calibrated score prediction tracked within 1–2 marks of real ILX exam simulator results throughout preparation. The weighted readiness model consistently directed effort to the topics that mattered most. On exam day, that precision translated directly into a pass.</p>
+      </div>
+      <div>
+        <table class="impact-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Before</th>
+              <th>After</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Exam preparation tool</td>
+              <td>Generic — ILX simulator, static banks</td>
+              <td style="color:#7dba84">Purpose-built for PeopleCert v7 syllabus</td>
+            </tr>
+            <tr>
+              <td>Learning outcome coverage</td>
+              <td>Unknown — no tracking</td>
+              <td style="color:#7dba84">All 48 LOs mapped and monitored</td>
+            </tr>
+            <tr>
+              <td>Readiness measurement</td>
+              <td>Raw score only — unweighted</td>
+              <td style="color:#7dba84">Weighted by actual PeopleCert mark scheme</td>
+            </tr>
+            <tr>
+              <td>Wrong answer handling</td>
+              <td>Returned to pool unchanged</td>
+              <td style="color:#7dba84">Recycled, reworded, surfaced by priority</td>
+            </tr>
+            <tr>
+              <td>Confusion pair targeting</td>
+              <td>None</td>
+              <td style="color:#7dba84">30+ pairs embedded in question generation</td>
+            </tr>
+            <tr>
+              <td>API cost exposure</td>
+              <td>Uncontrolled — client-side key</td>
+              <td style="color:#7dba84">Server-side proxy — key never exposed</td>
+            </tr>
+            <tr>
+              <td>Exam outcome</td>
+              <td>Uncertain</td>
+              <td style="color:#7dba84">PRINCE2 Foundation — Passed</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFLECTION -->
+  <section>
+    <div class="section-num">04 — What This Demonstrates</div>
+    <div class="reflection-grid">
+      <div class="reflection-item">
+        <h4>Self-Initiated Delivery</h4>
+        <p>No brief, no team, no instruction. I identified the gap in available tools, defined what the right tool would look like, and built and deployed it within a week. That instinct — to identify a problem and own its resolution — is the core PM reflex.</p>
+      </div>
+      <div class="reflection-item">
+        <h4>Requirements Before Build</h4>
+        <p>The question generation specification — BL1/BL2 split, confusion pairs, British English, no keyword mirroring — was written before the first API call. Good requirements engineering is not about documentation. It is about understanding what you are building and why before you build it.</p>
+      </div>
+      <div class="reflection-item">
+        <h4>Controlled Scope Expansion</h4>
+        <p>The app grew from one mode to seven through deliberate, problem-led iteration — not feature creep. Each addition was triggered by a specific identified failure. Scope discipline under self-direction is harder than scope discipline under a sponsor. This project required both.</p>
+      </div>
+      <div class="reflection-item">
+        <h4>Technical Ownership</h4>
+        <p>I debugged validation logic, rewrote API dependencies for Replit compatibility, and built a backend proxy from scratch. Technical fluency is not the same as being a developer — it is the ability to understand, diagnose, and resolve the technical constraints a project faces.</p>
+      </div>
+      <div class="reflection-item">
+        <h4>Governance as Practice</h4>
+        <p>The password screen and server-side proxy were governance decisions — risks identified, assessed, and mitigated before deployment. Treating a personal project with the same governance rigour as a commercial one is not over-engineering. It is professional habit.</p>
+      </div>
+      <div class="reflection-item">
+        <h4>One Measurable Outcome</h4>
+        <p>Every feature in the app — the calibrated deflation, the weighted readiness model, the Coverage Map — existed to drive a single defined outcome. That outcome was achieved. This is what benefits realisation looks like in practice: not a projected figure, but a result.</p>
+      </div>
+    </div>
+
+    <!-- CLOSER STATEMENT -->
+    <div style="margin-top: 72px; border-top: 1px solid var(--rule); padding-top: 56px; display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start;">
+      <div style="font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3);">The Bigger Picture</div>
+      <div>
+        <p style="font-family: 'Syne', sans-serif; font-size: clamp(20px, 2.5vw, 30px); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: var(--white); margin-bottom: 24px;">
+          This project wasn't about building an app.<br/><em style="font-weight: 400; color: var(--grey-4);">It was about identifying a gap, defining the solution, managing the build through structured iteration, governing the deployment, and realising a single measurable outcome — in one week, alone.</em>
+        </p>
+        <p style="font-size: 15px; color: var(--grey-5); line-height: 1.8;">That sequence — problem identification, requirements definition, scope control, iterative delivery, risk management, governance, benefits realisation — is the PM lifecycle. Most candidates study it for an exam. This project ran it in practice, from day one to a passing grade. The certification confirms the framework. This confirms the application.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="case-footer">
+    <p class="footer-note">PRINCE2 Master is a live tool deployed on Replit. A password-protected demo and full walkthrough video are available on request.</p>
+    <a href="/portfolio" class="footer-cta">View all projects →</a>
+  </footer>
+
+</body>
+</html>
