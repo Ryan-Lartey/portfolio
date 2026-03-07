@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Warranty LocatR — Case Study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f4f0;
+      --grey-1: #1a1a1a;
+      --grey-2: #2a2a2a;
+      --grey-3: #444;
+      --grey-4: #888;
+      --grey-5: #bbb;
+      --accent: #e8e4dc;
+      --rule: rgba(255,255,255,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 24px 48px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, transparent 100%);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--grey-5);
+      text-decoration: none;
+    }
+    .nav-back {
+      font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--grey-4); text-decoration: none;
+      border: 1px solid var(--grey-2); padding: 8px 18px; border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .nav-back:hover { color: var(--white); border-color: var(--grey-3); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 48px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-img-placeholder {
+      position: absolute; inset: 0;
+      background: var(--grey-1);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 12px;
+    }
+    /* ★ IMAGE 1: Full-screen hero — Screenshot of the Warranty LocatR dashboard (logged in as Admin, showing the live stat cards and the red recall alert banner). Crop to show the full dashboard at a slight angle or straight-on. */
+    .hero-img-placeholder::after {
+      content: "★ IMAGE 1\AWarranty LocatR Dashboard — full admin view\AShowing stat cards, overdue banner & Ford recall alert";
+      white-space: pre;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; color: var(--grey-3);
+      text-align: center; line-height: 1.8;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,1) 0%, rgba(10,10,10,0.6) 50%, rgba(10,10,10,0.2) 100%);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 860px; }
+    .hero-tag {
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--grey-4); margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-tag::before {
+      content: ''; display: block; width: 32px; height: 1px; background: var(--grey-3);
+    }
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(48px, 7vw, 96px); font-weight: 800;
+      line-height: 0.95; letter-spacing: -0.03em;
+      margin-bottom: 32px;
+    }
+    .hero-title em { font-style: italic; font-weight: 400; color: var(--grey-4); }
+    .hero-meta {
+      display: flex; gap: 40px; flex-wrap: wrap;
+    }
+    .meta-item { }
+    .meta-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-4); margin-bottom: 4px; }
+    .meta-value { font-size: 14px; color: var(--grey-5); }
+
+    /* ── SECTIONS ── */
+    section { padding: 100px 48px; border-top: 1px solid var(--rule); }
+    .section-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--grey-3);
+      margin-bottom: 56px;
+    }
+
+    /* ── PROBLEM ── */
+    .problem-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+    .problem-left h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(32px, 4vw, 52px); font-weight: 700;
+      line-height: 1.05; letter-spacing: -0.02em;
+      margin-bottom: 32px;
+    }
+    .problem-left h2 em { font-style: italic; font-weight: 400; color: var(--grey-4); }
+    .problem-left p { color: var(--grey-5); font-size: 16px; line-height: 1.8; margin-bottom: 20px; }
+    .risk-list { list-style: none; margin-top: 40px; }
+    .risk-list li {
+      padding: 16px 0; border-top: 1px solid var(--rule);
+      font-size: 14px; color: var(--grey-5); display: flex; gap: 16px; align-items: flex-start;
+    }
+    .risk-list li:last-child { border-bottom: 1px solid var(--rule); }
+    .risk-num {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      color: var(--grey-3); letter-spacing: 0.1em; padding-top: 3px; min-width: 24px;
+    }
+
+    /* ★ IMAGE 2 placeholder */
+    .img-placeholder {
+      background: var(--grey-1); border: 1px solid var(--grey-2);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; padding: 40px; text-align: center;
+      border-radius: 2px;
+    }
+    .img-placeholder-label {
+      font-size: 12px; color: var(--grey-3); line-height: 1.8;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .img-placeholder-title {
+      font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--grey-2);
+      margin-bottom: 8px;
+    }
+
+    /* ── STATS BAND ── */
+    .stats-band {
+      padding: 0 48px; border-top: 1px solid var(--rule);
+    }
+    .stats-inner {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-left: 1px solid var(--rule);
+    }
+    .stat-block {
+      padding: 56px 40px; border-right: 1px solid var(--rule);
+    }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(36px, 4vw, 60px); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1;
+      margin-bottom: 10px;
+    }
+    .stat-desc { font-size: 13px; color: var(--grey-4); line-height: 1.5; }
+
+    /* ── HOW IT WORKS ── */
+    .workflow-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .workflow-steps { }
+    .step {
+      display: flex; gap: 24px; padding: 28px 0; border-top: 1px solid var(--rule);
+    }
+    .step:last-child { border-bottom: 1px solid var(--rule); }
+    .step-num {
+      font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+      color: var(--grey-3); letter-spacing: 0.1em; padding-top: 4px; min-width: 28px;
+    }
+    .step-body h4 {
+      font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+      letter-spacing: 0.05em; margin-bottom: 6px;
+    }
+    .step-body p { font-size: 14px; color: var(--grey-5); line-height: 1.7; }
+
+    /* ── FEATURES (text-left, image-right alternating) ── */
+    .feature-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      align-items: center; padding: 80px 48px;
+      border-top: 1px solid var(--rule);
+    }
+    .feature-row.reverse { direction: rtl; }
+    .feature-row.reverse > * { direction: ltr; }
+    .feature-text h3 {
+      font-family: 'Syne', sans-serif; font-size: clamp(24px, 3vw, 38px);
+      font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 20px;
+    }
+    .feature-text h3 em { font-style: italic; font-weight: 400; color: var(--grey-4); }
+    .feature-text p { font-size: 15px; color: var(--grey-5); line-height: 1.8; margin-bottom: 16px; }
+    .feature-tag {
+      display: inline-block; font-size: 10px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--grey-4); border: 1px solid var(--grey-2);
+      padding: 6px 12px; border-radius: 2px; margin-bottom: 20px;
+    }
+    .feature-img { aspect-ratio: 4/3; }
+
+    /* ── IMPACT ── */
+    .impact-section { }
+    .impact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-top: 0;
+    }
+    .impact-left h2 {
+      font-family: 'Syne', sans-serif; font-size: clamp(32px, 4vw, 52px);
+      font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 32px;
+    }
+    .impact-left h2 em { font-style: italic; font-weight: 400; color: var(--grey-4); }
+    .impact-left p { font-size: 15px; color: var(--grey-5); line-height: 1.8; margin-bottom: 20px; }
+    .impact-table { width: 100%; border-collapse: collapse; }
+    .impact-table th {
+      font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--grey-3); font-weight: 700; text-align: left;
+      padding: 12px 0; border-bottom: 1px solid var(--grey-2);
+    }
+    .impact-table td {
+      font-size: 14px; padding: 16px 0; border-bottom: 1px solid var(--rule);
+      color: var(--grey-5); vertical-align: top;
+    }
+    .impact-table td:first-child { color: var(--white); padding-right: 24px; }
+    .impact-table td:last-child { color: #7dba84; }
+
+    /* ── REFLECTION ── */
+    .reflection-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px;
+      background: var(--grey-2); border: 1px solid var(--grey-2); margin-top: 56px;
+    }
+    .reflection-item {
+      background: var(--black); padding: 48px 36px;
+    }
+    .reflection-item h4 {
+      font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .reflection-item p { font-size: 14px; color: var(--grey-4); line-height: 1.7; }
+
+    /* ── FOOTER ── */
+    .case-footer {
+      padding: 80px 48px; border-top: 1px solid var(--rule);
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .footer-note { font-size: 13px; color: var(--grey-3); max-width: 400px; line-height: 1.7; }
+    .footer-cta {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--white); text-decoration: none;
+      border-bottom: 1px solid var(--grey-3); padding-bottom: 4px;
+      transition: border-color 0.2s;
+    }
+    .footer-cta:hover { border-color: var(--white); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(32px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-content > * {
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .hero-tag { animation-delay: 0.1s; }
+    .hero-title { animation-delay: 0.2s; }
+    .hero-meta { animation-delay: 0.35s; }
+
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .hero { padding: 0 24px 60px; }
+      section { padding: 72px 24px; }
+      .stats-band { padding: 0 24px; }
+      .feature-row { padding: 60px 24px; grid-template-columns: 1fr; gap: 40px; }
+      .feature-row.reverse { direction: ltr; }
+      .problem-grid, .workflow-grid, .impact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .stats-inner { grid-template-columns: 1fr 1fr; }
+      .reflection-grid { grid-template-columns: 1fr; }
+      .case-footer { flex-direction: column; gap: 32px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="../index.html" class="nav-logo">Ryan Lartey</a>
+    <a href="../index.html" class="nav-back">← Portfolio</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-img-placeholder"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Operational PM Project · Initiated, Scoped & Delivered Independently · 2026</div>
+      <h1 class="hero-title">Warranty<br/><em>LocatR</em></h1>
+      <div class="hero-meta">
+        <div class="meta-item">
+          <div class="meta-label">Organisation</div>
+          <div class="meta-value">Haynes Brothers Ltd</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Role</div>
+          <div class="meta-value">Product Owner & Developer</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Stack</div>
+          <div class="meta-value">Node.js · React · SQLite</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Status</div>
+          <div class="meta-value">Live in production</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM -->
+  <section>
+    <div class="section-num">01 — The Problem</div>
+    <div class="problem-grid">
+      <div class="problem-left">
+        <h2>A compliance risk<br/><em>with no owner</em></h2>
+        <p>Haynes Brothers operates under Ford warranty obligations requiring all parts removed during a warranty repair to be physically retained for a minimum of three months. Ford can request any part at any point.</p>
+        <p>If a part cannot be produced, the entire warranty claim is voided — a financial exposure running into thousands of pounds per incident. Before Warranty LocatR, there was no process, no record, and no visibility.</p>
+        <ul class="risk-list">
+          <li><span class="risk-num">01</span> Parts could not be located when Ford requested them, voiding claims</li>
+          <li><span class="risk-num">02</span> No record of who checked a part in, when, or where it was placed</li>
+          <li><span class="risk-num">03</span> No early warning for parts approaching the 3-month retention deadline</li>
+          <li><span class="risk-num">04</span> No formal process for logging or responding to Ford recall requests</li>
+          <li><span class="risk-num">05</span> No visibility over whether technicians placed parts in the correct area</li>
+        </ul>
+      </div>
+      <div>
+        <!-- ★ IMAGE 2: A split or before/after visual. Left side: a photo of a physical parts shelf/holding area — boxes or tagged parts sitting in a bay. Right side: a screenshot of the Warranty LocatR check-in form. Or just the holding area photo on its own. This visualises the "before" state — physical chaos with no system. -->
+        <div class="img-placeholder" style="aspect-ratio: 3/4;">
+          <div class="img-placeholder-title">★ Image 2</div>
+          <div class="img-placeholder-label">Photo of the physical parts holding area<br/>— shelves, labelled boxes, or tagged parts<br/>Shows the "before" — no digital system</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAND -->
+  <div class="stats-band">
+    <div class="stats-inner">
+      <div class="stat-block">
+        <div class="stat-num">10–15</div>
+        <div class="stat-desc">Warranty parts processed<br/>per day across both departments</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">&lt;60s</div>
+        <div class="stat-desc">Average part retrieval time<br/>vs. 15–25 mins manual search</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">£5k+</div>
+        <div class="stat-desc">Potential cost of a single<br/>voided Ford warranty claim</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">6</div>
+        <div class="stat-desc">Active users across<br/>4 role-based permission levels</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PM COMPETENCIES BAND -->
+  <section style="padding: 72px 48px; border-top: 1px solid var(--rule);">
+    <div class="section-num">PM Competencies Demonstrated</div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--grey-2); border: 1px solid var(--grey-2); margin-top: 0;">
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Initiation</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">Identified the business need independently, defined scope, and built the case for the solution without being asked — the same judgement a PM applies before a project brief exists.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Planning & Scope</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">Defined what the system would and wouldn't do upfront. Role-based permissions, mandatory fields, and structured workflows were scope decisions — made before a single line of code was written.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Stakeholder Management</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">Four distinct stakeholder roles with different needs, responsibilities, and information access. The Recall Manager's view was built around Chris's actual job — not a generic admin panel.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Risk Management</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">Every feature maps to a specific operational risk: overdue alerts address the retention risk, the recall log addresses audit risk, mandatory fields address data quality risk. Risk-first design.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Governance & Audit</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">Every action in the system is attributed by name and timestamp. The Recall Log, retention reports, and handover confirmations exist because compliance to Ford must be evidenced — not assumed.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Requirements Gathering</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">The system was built around how the team actually works — not how a developer imagined they worked. The Parts Advisor check-in flow, the 72-hour overdue threshold, the Recall Manager role — all came from understanding the real workflow first.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Change Management</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">The team went from no process to a structured daily system. That's a behaviour change — not just a software rollout. Designing a system people would actually use required as much people thinking as technical thinking.</p>
+      </div>
+      <div style="background: var(--black); padding: 36px 28px;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3); margin-bottom: 16px;">Benefits Realisation</div>
+        <p style="font-size: 13px; color: var(--grey-4); line-height: 1.7;">The system was never the goal — zero voided claims and a defensible audit trail were. Every feature decision was tested against that outcome. The benefits are measurable, live, and ongoing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section>
+    <div class="section-num">02 — How It Works</div>
+    <div class="workflow-grid">
+      <div class="workflow-steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <h4>Check In</h4>
+            <p>Parts Advisors log each warranty part immediately after removal — six mandatory fields enforced. The form cannot be submitted incomplete, ensuring data integrity from the first touchpoint.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <h4>Collection Confirmation</h4>
+            <p>Before a warehouse location is assigned, physical collection must be confirmed with a timestamp — creating a clear handover record from holding area to warehouse custody.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <h4>Locate & Log</h4>
+            <p>Each part is assigned an exact warehouse location with optional condition notes. Every action is attributed to a named user with a timestamp, building a fully defensible audit trail.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-body">
+            <h4>Instant Retrieval</h4>
+            <p>Any user can search by Part Number, WIP Code, or description. Fuzzy matching means a wrong part number can still surface the right part — a deliberate safety net against data entry errors.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">05</div>
+          <div class="step-body">
+            <h4>Ford Recall Response</h4>
+            <p>When Ford emails a recall request, the Recall Manager triggers a Ford Recall Request in the system. An immediate red alert fires to the Admin dashboard. Resolution is logged with a full timestamped audit trail.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ★ IMAGE 3: Screenshot of the Smart Search results page — showing a search for a part by description with fuzzy results returned. This is a clean UI screenshot that shows the system in action. -->
+      <div class="img-placeholder" style="aspect-ratio: 3/4;">
+        <div class="img-placeholder-title">★ Image 3</div>
+        <div class="img-placeholder-label">Screenshot of Smart Search in action<br/>— fuzzy search results for a part by description<br/>Shows the system returning a located part with warehouse address</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE ROW 1 — Dashboard -->
+  <div class="feature-row">
+    <!-- ★ IMAGE 4: Close-up screenshot of the Dashboard — focus on the 7 stat cards and the red Ford Recall Alert banner. Ideally captured with an active recall alert showing (even a test one) so the red banner is visible. -->
+    <div class="img-placeholder feature-img">
+      <div class="img-placeholder-title">★ Image 4</div>
+      <div class="img-placeholder-label">Dashboard close-up<br/>7 stat cards + red Ford Recall Alert banner<br/>Ideally with an active recall alert visible</div>
+    </div>
+    <div class="feature-text">
+      <div class="feature-tag">Live Dashboard</div>
+      <h3>Full operational<br/><em>visibility at a glance</em></h3>
+      <p>The Dashboard gives Admins and Recall Managers a real-time overview of everything in the system. Seven live stat cards surface what matters: total active parts, unlocated parts, overdue parts flagged at 72 hours, upcoming expirations, and a split by department.</p>
+      <p>Any unresolved Ford recall request triggers a persistent red banner — impossible to miss, immediately actionable.</p>
+    </div>
+  </div>
+
+  <!-- FEATURE ROW 2 — Retention -->
+  <div class="feature-row reverse">
+    <!-- ★ IMAGE 5: Screenshot of the Expiring Soon page — the colour-coded table showing parts in red (under 14 days), amber (14–21 days), and green (21–30 days). This is a strong visual — the colour coding tells the story immediately. -->
+    <div class="img-placeholder feature-img">
+      <div class="img-placeholder-title">★ Image 5</div>
+      <div class="img-placeholder-label">Expiring Soon page<br/>Colour-coded retention table<br/>Red / Amber / Green by days remaining</div>
+    </div>
+    <div class="feature-text">
+      <div class="feature-tag">Retention Management</div>
+      <h3>Never miss<br/><em>a deadline again</em></h3>
+      <p>Every part tracked in the system automatically approaches its 3-month Ford retention deadline on a countdown. A 14-day expiry warning fires before the deadline. Parts auto-move to a Disposal folder at 3 months and are permanently deleted two weeks later.</p>
+      <p>The Expiring Soon page presents a colour-coded table — red under 14 days, amber at 14–21 days, green at 21–30 — so priority is immediate and unambiguous. Admin can export a monthly retention report as a CSV in one click.</p>
+    </div>
+  </div>
+
+  <!-- FEATURE ROW 3 — Recall -->
+  <div class="feature-row">
+    <!-- ★ IMAGE 6: Screenshot of the Recall Log — the full audit trail table showing past Ford recall requests with requester name, timestamp, parts found, and resolution status. This demonstrates the governance and audit trail capability. -->
+    <div class="img-placeholder feature-img">
+      <div class="img-placeholder-title">★ Image 6</div>
+      <div class="img-placeholder-label">Ford Recall Log<br/>Full audit trail — requester, timestamp,<br/>parts found, resolution status</div>
+    </div>
+    <div class="feature-text">
+      <div class="feature-tag">Ford Recall Response</div>
+      <h3>A defensible record<br/><em>for every request</em></h3>
+      <p>When Ford emails a recall request, the Recall Manager logs it directly in Warranty LocatR. The system finds the part, timestamps the request, and fires an immediate alert to the Admin dashboard. Resolution is confirmed in the system and recorded for audit.</p>
+      <p>Every recall request — past and present — is stored in the Recall Log with a complete timestamped audit trail. If Ford ever challenges a claim, the evidence is there.</p>
+    </div>
+  </div>
+
+  <!-- IMPACT -->
+  <section class="impact-section">
+    <div class="section-num">03 — Impact</div>
+    <div class="impact-grid">
+      <div class="impact-left">
+        <h2>From zero visibility<br/><em>to full control</em></h2>
+        <p>Before Warranty LocatR, the business was running a compliance and financial risk with no process to manage it. A single voided Ford warranty claim can cost upwards of £5,000. The system eliminates that exposure through structure, not chance.</p>
+        <p>Across 10–15 parts processed per day, it also returns significant time — removing a 15–25 minute manual search process and replacing it with a sub-60 second lookup for any user on any device.</p>
+      </div>
+      <div>
+        <table class="impact-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Before</th>
+              <th>After</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Part retrieval time</td>
+              <td>15–25 mins</td>
+              <td style="color:#7dba84">Under 60 seconds</td>
+            </tr>
+            <tr>
+              <td>Audit trail</td>
+              <td>None</td>
+              <td style="color:#7dba84">100% — every action timestamped</td>
+            </tr>
+            <tr>
+              <td>Recall response process</td>
+              <td>Unstructured</td>
+              <td style="color:#7dba84">Logged, alerted & resolved in system</td>
+            </tr>
+            <tr>
+              <td>Overdue part visibility</td>
+              <td>None</td>
+              <td style="color:#7dba84">Real-time dashboard alert at 72hrs</td>
+            </tr>
+            <tr>
+              <td>Expiry risk management</td>
+              <td>Manual — if remembered</td>
+              <td style="color:#7dba84">Automated — 14-day warning + CSV export</td>
+            </tr>
+            <tr>
+              <td>Voided claims since launch</td>
+              <td>Risk unmanaged</td>
+              <td style="color:#7dba84">Zero</td>
+            </tr>
+            <tr>
+              <td>System running cost</td>
+              <td>N/A</td>
+              <td style="color:#7dba84">Flat Replit hosting fee only</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFLECTION -->
+  <section>
+    <div class="section-num">04 — What This Demonstrates</div>
+    <div class="reflection-grid">
+      <div class="reflection-item">
+        <h4>Problem Identification</h4>
+        <p>I recognised a compliance and financial risk that had no owner, no process, and no visibility — and initiated a solution entirely unprompted. This is the instinct a PM brings before a project brief exists.</p>
+      </div>
+      <div class="reflection-item">
+        <h4>Stakeholder Design</h4>
+        <p>The four-role permission model was a stakeholder decision, not a technical one. I mapped each role to their actual responsibilities and built access around how they work — requirements gathering applied to a real team.</p>
+      </div>
+      <div class="reflection-item">
+        <h4>Governance & Audit Trail</h4>
+        <p>Every feature was built with defensibility in mind — timestamped actions, named users, retention reports, recall logs. This is PRINCE2 governance thinking: assume you will need to evidence compliance, and build for it from day one.</p>
+      </div>
+      <div class="reflection-item">
+        <h4>End-to-End Ownership</h4>
+        <p>Initiation through to live production — scoping, stakeholder mapping, build, deployment, user management, and ongoing ownership. This project was managed with the same structure I would bring to any formal PM engagement.</p>
+      </div>
+      <div class="reflection-item">
+        <h4>Delivery Under Constraint</h4>
+        <p>No budget, no team, no specification. Built and live at flat hosting cost, processing 10–15 parts per day. Constraints are not blockers — they're the conditions under which real delivery happens.</p>
+      </div>
+      <div class="reflection-item">
+        <h4>Measurable Benefits Realised</h4>
+        <p>Zero voided Ford warranty claims since deployment. A 15–25 minute search process reduced to under 60 seconds. These aren't projected benefits — they're live, sustained outcomes from a system in daily use.</p>
+      </div>
+    </div>
+
+    <!-- CLOSER STATEMENT -->
+    <div style="margin-top: 72px; border-top: 1px solid var(--rule); padding-top: 56px; display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start;">
+      <div style="font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey-3);">The Bigger Picture</div>
+      <div>
+        <p style="font-family: 'Syne', sans-serif; font-size: clamp(20px, 2.5vw, 30px); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; color: var(--white); margin-bottom: 24px;">
+          This project wasn't about building an app.<br/><em style="font-weight: 400; color: var(--grey-4);">It was about identifying a business risk, defining a solution, managing its delivery, and realising measurable benefits — with no instruction and no team.</em>
+        </p>
+        <p style="font-size: 15px; color: var(--grey-5); line-height: 1.8;">That sequence — problem identification, scope definition, stakeholder mapping, delivery, governance, benefits realisation — is the PM lifecycle. Warranty LocatR demonstrates it end-to-end, in a live commercial environment, at real operational scale. The certifications confirm the methodology. This project proves the application.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="case-footer">
+    <p class="footer-note">Warranty LocatR is a live internal production system at Haynes Brothers Ltd. Screenshots and a full walkthrough demo are available on request.</p>
+    <a href="../index.html" class="footer-cta">View all projects →</a>
+  </footer>
+
+</body>
+</html>
