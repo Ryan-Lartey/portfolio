@@ -378,6 +378,31 @@
 
       .case-footer { align-items: flex-start; }
     }
+
+    /* ── Hero mobile fix ── */
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: clamp(32px, 11vw, 56px);
+        letter-spacing: -0.02em;
+      }
+      .hero-tag {
+        font-size: 9px;
+        letter-spacing: 0.08em;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .hero-meta {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px 16px;
+      }
+      nav {
+        padding: 16px var(--pad);
+      }
+      .nav-back {
+        font-size: 10px;
+        padding: 6px 10px;
+      }
+    }
   </style>
 </head>
 <body>
