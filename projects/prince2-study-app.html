@@ -79,7 +79,7 @@
     }
     .hero-title {
       font-family: 'Syne', sans-serif;
-      font-size: clamp(52px, 13vw, 96px); font-weight: 800;
+      font-size: clamp(40px, 11vw, 96px); font-weight: 800;
       line-height: 0.93; letter-spacing: -0.03em;
       margin-bottom: 28px;
     }
@@ -346,6 +346,20 @@
     }
 
     /* ── Small Mobile: ≤ 420px ── */
+    @media (max-width: 640px) {
+      .hero {
+        min-height: 60vh;
+        padding-bottom: clamp(36px, 6vh, 56px);
+      }
+      .hero-title {
+        font-size: clamp(36px, 14vw, 64px);
+        margin-bottom: 20px;
+      }
+      .hero-tag {
+        margin-bottom: 14px;
+      }
+    }
+
     @media (max-width: 420px) {
       .hero-meta { grid-template-columns: 1fr; gap: 14px; }
 
