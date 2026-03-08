@@ -106,6 +106,8 @@
     .cert-year { position:absolute; bottom:32px; right:32px; font-family:'Syne',sans-serif; font-weight:700; font-size:11px; color:var(--g3); }
     .cert-download { display:inline-flex; align-items:center; gap:6px; margin-top:20px; font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--g4); text-decoration:none; border:1px solid var(--g2); padding:8px 14px; border-radius:2px; transition:color 0.2s,border-color 0.2s,background 0.2s; }
     .cert-download:hover { color:var(--white); border-color:var(--g3); background:rgba(255,255,255,0.04); }
+    .cert-card--badge { position:relative; }
+    .cert-badge-img { position:absolute; top:50%; right:28px; transform:translateY(-60%); width:90px; height:90px; object-fit:contain; opacity:0.85; filter:drop-shadow(0 0 20px rgba(255,255,255,0.08)); pointer-events:none; }
     .contact-inner { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
     .contact-title { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(36px,4vw,56px); letter-spacing:-0.03em; line-height:0.95; margin-bottom:28px; }
     .contact-title em { font-style:italic; font-weight:400; color:var(--g4); }
@@ -336,7 +338,8 @@
     <h2 class="section-title">Certifications &amp;<br/><em>Training</em></h2>
   </div>
   <div class="certs-grid reveal">
-    <div class="cert-card">
+    <div class="cert-card cert-card--badge">
+      <img src="images/prince2-badge.png" alt="PRINCE2 Foundation Badge" class="cert-badge-img" onerror="this.style.display='none'"/>
       <div class="cert-num">01</div>
       <div class="cert-name">PRINCE2 Foundation</div>
       <div class="cert-issuer">PeopleCert</div>
