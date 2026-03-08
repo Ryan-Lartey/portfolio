@@ -60,6 +60,12 @@
       text-decoration: none;
     }
 
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     .nav-back {
       font-family: 'DM Sans', sans-serif;
       font-size: 11px;
@@ -75,14 +81,25 @@
 
     .nav-back:hover { color: var(--white); border-color: var(--g200); }
 
+    .nav-docs {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--white);
+      text-decoration: none;
+      padding: 7px 16px;
+      border: 1px solid var(--white);
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+
+    .nav-docs:hover { background: var(--g100); border-color: var(--g100); }
+
     /* ─── HERO ────────────────────────────────────────────── */
     .hero {
-      min-height: 100svh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 80px var(--pad) 72px;
-      padding-top: calc(80px + 60px);
+      padding: calc(60px + 80px) var(--pad) 72px;
       border-bottom: 1px solid var(--g400);
       position: relative;
       overflow: hidden;
@@ -102,7 +119,7 @@
       position: absolute;
       right: 32px;
       top: 50%;
-      transform: translateY(-55%);
+      transform: translateY(-50%);
       font-family: 'Syne', sans-serif;
       font-size: clamp(140px, 26vw, 380px);
       font-weight: 800;
@@ -268,17 +285,17 @@
       white-space: nowrap;
     }
 
-    /* ─── FEATURE SECTIONS ────────────────────────────────── */
+    /* ─── FEATURE SECTIONS (text-only, wide column) ───────── */
     .feature {
-      padding: 112px 0;
+      padding: 96px 0;
       border-bottom: 1px solid var(--g400);
     }
 
-    .feature-grid {
+    .feature-body {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 380px;
       gap: 80px;
-      align-items: center;
+      align-items: start;
     }
 
     .f-label {
@@ -323,90 +340,71 @@
       font-style: italic;
     }
 
-    /* ─── IMAGE PLACEHOLDERS ──────────────────────────────── */
-    .img-ph {
-      background: var(--g600);
-      border: 1px solid var(--g400);
-      width: 100%;
+    /* ─── FEATURE SIDEBAR ─────────────────────────────────── */
+    .f-sidebar {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 28px 24px 40px;
-      position: relative;
+      gap: 1px;
+      background: var(--g400);
+      border: 1px solid var(--g400);
+      position: sticky;
+      top: 80px;
     }
 
-    .ph-star {
-      font-family: 'Syne', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
+    .f-sidebar-cell {
+      background: var(--black);
+      padding: 20px 22px;
+    }
+
+    .f-sidebar-cell:first-child {
+      background: var(--g600);
+    }
+
+    .f-sc-label {
+      font-size: 8.5px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
+      color: var(--g300);
+      margin-bottom: 6px;
+    }
+
+    .f-sc-value {
+      font-size: 12.5px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--g100);
+    }
+
+    .f-sc-value strong {
       color: var(--white);
-      margin-bottom: 14px;
-    }
-
-    .ph-doc {
-      font-size: 11px;
-      line-height: 1.8;
-      color: var(--g200);
-    }
-
-    .ph-doc strong { color: var(--g100); font-weight: 500; }
-
-    .ph-dims {
-      position: absolute;
-      bottom: 10px;
-      right: 12px;
-      font-family: monospace;
-      font-size: 9.5px;
-      color: var(--g400);
-      letter-spacing: 0.06em;
-    }
-
-    /* ─── PDF LINK ────────────────────────────────────────── */
-    .pdf-link {
-      display: block;
-      width: 100%;
-      position: relative;
-      text-decoration: none;
-    }
-
-    .pdf-badge {
-      position: absolute;
-      top: 12px; right: 12px;
-      background: var(--white);
-      color: var(--black);
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      z-index: 2;
-    }
-
-    .pdf-hover {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 16px;
-      background: rgba(10,10,10,0.92);
-      font-size: 10.5px;
       font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--white);
-      text-align: center;
-      opacity: 0;
-      transform: translateY(4px);
-      transition: opacity 0.22s ease, transform 0.22s ease;
-      z-index: 2;
+      display: block;
+      font-size: 14px;
+      margin-bottom: 2px;
     }
 
-    .pdf-link:hover .pdf-hover { opacity: 1; transform: translateY(0); }
+    /* ─── FEATURE TAGS (small inline labels) ─────────────── */
+    .f-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 24px;
+    }
 
-    /* ─── IMPACT TABLE ────────────────────────────────────── */
-    .impact {
-      padding: 112px 0;
+    .f-tag {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--g300);
+      border: 1px solid var(--g400);
+      padding: 5px 10px;
+    }
+
+    /* ─── ARTEFACTS SECTION ───────────────────────────────── */
+    .artefacts {
+      padding: 96px 0;
       border-bottom: 1px solid var(--g400);
     }
 
@@ -427,6 +425,129 @@
       letter-spacing: -0.03em;
       color: var(--white);
       margin-bottom: 56px;
+    }
+
+    .artefact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--g400);
+      border: 1px solid var(--g400);
+    }
+
+    .artefact-card {
+      background: var(--black);
+      padding: 44px 44px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      text-decoration: none;
+      transition: background 0.18s ease;
+      position: relative;
+    }
+
+    .artefact-card:hover { background: var(--g600); }
+
+    .artefact-card:hover .ac-arrow { opacity: 1; transform: translate(0, 0); }
+
+    .ac-type-badge {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--g400);
+      color: var(--g300);
+      margin-bottom: 24px;
+      align-self: flex-start;
+    }
+
+    .ac-type-badge.xlsx { border-color: #4472C4; color: #7aa3e6; }
+    .ac-type-badge.pdf  { border-color: var(--g200); color: var(--g100); }
+
+    .ac-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(20px, 2.2vw, 28px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .ac-filename {
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--g300);
+      margin-bottom: 28px;
+      letter-spacing: 0.02em;
+    }
+
+    .ac-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--g400);
+      margin-bottom: 28px;
+    }
+
+    .ac-contents-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--g300);
+      margin-bottom: 14px;
+    }
+
+    .ac-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .ac-list li {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--g200);
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .ac-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--g400);
+      font-size: 11px;
+    }
+
+    .ac-cta {
+      margin-top: 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white);
+      border-top: 1px solid var(--g400);
+      padding-top: 18px;
+    }
+
+    .ac-arrow {
+      opacity: 0.4;
+      transform: translate(-4px, 0);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    /* ─── IMPACT TABLE ────────────────────────────────────── */
+    .impact {
+      padding: 112px 0;
+      border-bottom: 1px solid var(--g400);
     }
 
     .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -565,31 +686,13 @@
       border: 1px solid var(--g400);
     }
 
-    /* ─── FEATURE TAGS (small inline labels) ─────────────── */
-    .f-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 24px;
-    }
-
-    .f-tag {
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--g300);
-      border: 1px solid var(--g400);
-      padding: 5px 10px;
-    }
-
     /* ════════════════════════════════════════════════════════
        TABLET ≤ 900px
     ════════════════════════════════════════════════════════ */
     @media (max-width: 900px) {
       :root { --pad: 36px; }
 
-      .hero { padding: 72px var(--pad) 60px; }
+      .hero { padding: calc(60px + 56px) var(--pad) 56px; }
 
       .stats-inner {
         grid-template-columns: repeat(3, 1fr);
@@ -605,9 +708,11 @@
       .stat:nth-child(4) { padding-left: 0; }
       .stat:last-child   { border-right: none; padding-right: 0; }
 
-      .feature { padding: 80px 0; }
-      .feature-grid { grid-template-columns: 1fr; gap: 44px; }
-      .feature-grid.img-first .feat-img { order: -1; }
+      .feature { padding: 72px 0; }
+      .feature-body { grid-template-columns: 1fr; gap: 40px; }
+      .f-sidebar { position: static; }
+
+      .artefact-grid { grid-template-columns: 1fr; }
 
       .impact     { padding: 80px 0; }
       .reflection { padding: 80px 0; }
@@ -622,8 +727,9 @@
 
       .nav { padding: 0 20px; }
       .nav-name { font-size: 12px; }
+      .nav-docs { display: none; }
 
-      .hero { padding: 64px var(--pad) 48px; }
+      .hero { padding: calc(60px + 44px) var(--pad) 40px; }
       .hero-bg-index { display: none; }
       .hero-eyebrow  { font-size: 9px; letter-spacing: 0.12em; margin-bottom: 18px; }
       .hero-title    { font-size: clamp(38px, 11vw, 56px); }
@@ -665,11 +771,14 @@
       .comp-label  { width: 100%; }
 
       .feature     { padding: 56px 0; }
-      .feature-grid { gap: 32px; }
+      .feature-body { gap: 28px; }
       .f-heading   { font-size: clamp(22px, 7vw, 30px); }
       .f-body      { font-size: 14px; }
       .f-pull      { margin-top: 20px; padding: 14px 16px; }
       .f-pull p    { font-size: 12.5px; }
+
+      .artefacts { padding: 56px 0; }
+      .artefact-card { padding: 28px 24px; }
 
       .impact { padding: 56px 0; }
       .section-heading { font-size: clamp(26px, 8vw, 36px); margin-bottom: 32px; }
@@ -697,7 +806,10 @@
 <!-- NAV -->
 <nav class="nav">
   <a href="/" class="nav-name">Ryan Lartey</a>
-  <a href="/" class="nav-back">← Portfolio</a>
+  <div class="nav-actions">
+    <a href="#artefacts" class="nav-docs">↓ Source Docs</a>
+    <a href="/" class="nav-back">← Portfolio</a>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -777,7 +889,7 @@
 <!-- FEATURE 01 — Planning -->
 <section class="feature">
   <div class="wrap">
-    <div class="feature-grid">
+    <div class="feature-body">
       <div class="feat-txt">
         <p class="f-label">01 — Planning</p>
         <h2 class="f-heading">Mapping what the plan was missing before anything else</h2>
@@ -794,55 +906,28 @@
           <span class="f-tag">Dependency Tracking</span>
         </div>
       </div>
-      <div class="feat-img">
-        <!--
-          ★ IMAGE 1
-          Document: "(1a) PROJECT PLANNING + RATIONALE (WP).pdf"
-          Capture: Page 1, zoom ~120%. Show heading "1 – PROJECT PLANNING",
-                   subheading "Missing Key Milestones – HotelO24:", first 3 bullet blocks.
-          Dims: 536 × 400px (capture at 2× = 1072 × 800px)
-          Clickable: YES → download PDF
-          To activate: wrap img in <a href="path/to/(1a)..." download class="pdf-link">
-        -->
-        <div class="img-ph" style="aspect-ratio:536/400;">
-          <p class="ph-star">★ IMAGE 1</p>
-          <p class="ph-doc">
-            <strong>File:</strong> (1a) PROJECT PLANNING + RATIONALE (WP).pdf<br>
-            <strong>Page:</strong> Page 1, zoom 120%<br>
-            <strong>Show:</strong> "Missing Key Milestones – HotelO24" heading + first 3 bullet blocks<br>
-            <strong>Clickable:</strong> Yes → download PDF
-          </p>
-          <span class="ph-dims">536 × 400px</span>
+      <div class="f-sidebar">
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">Artefacts</p>
+          <p class="f-sc-value"><strong>1a — Planning + Rationale</strong>Milestone gap analysis across both sub-projects. 10 missing milestones identified with source references and dependency chains.</p>
+        </div>
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">Key Finding</p>
+          <p class="f-sc-value">Terrace cert (Month 6) → IOC legal agreement (Month 8) dependency chain invisible in original Gantt.</p>
+        </div>
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">PRINCE2 Theme</p>
+          <p class="f-sc-value">Plans — baseline before committing; phases cannot close without confirmed outputs.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FEATURE 02 — Risk & Issues (image left) -->
+<!-- FEATURE 02 — Risk & Issues -->
 <section class="feature">
   <div class="wrap">
-    <div class="feature-grid img-first">
-      <div class="feat-img">
-        <!--
-          ★ IMAGE 2
-          Document: "1b, 3, 4, 9 (WP).xlsx"
-          Sheet: Risk Log tab
-          Show: Column headers + all populated rows. Impact Rating and Likelihood Rating columns visible.
-          Dims: 536 × 340px (capture at 2× = 1072 × 680px)
-          Clickable: YES → download .xlsx
-        -->
-        <div class="img-ph" style="aspect-ratio:536/340;">
-          <p class="ph-star">★ IMAGE 2</p>
-          <p class="ph-doc">
-            <strong>File:</strong> 1b, 3, 4, 9 (WP).xlsx — Risk Log tab<br>
-            <strong>Show:</strong> All headers + all rows. Impact &amp; Likelihood columns visible.<br>
-            <strong>Crop:</strong> Header → last risk row. No blank rows.<br>
-            <strong>Clickable:</strong> Yes → download .xlsx
-          </p>
-          <span class="ph-dims">536 × 340px</span>
-        </div>
-      </div>
+    <div class="feature-body">
       <div class="feat-txt">
         <p class="f-label">02 — Risk &amp; Issues</p>
         <h2 class="f-heading">Eight risks.<br>Nine issues.<br>Every one owned, rated, and targeted.</h2>
@@ -856,6 +941,20 @@
           <span class="f-tag">Escalation</span>
         </div>
       </div>
+      <div class="f-sidebar">
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">Artefacts</p>
+          <p class="f-sc-value"><strong>3 — Risk Log &nbsp;·&nbsp; 4 — Issue Log</strong>8 risks formally scored; 12 issues actively managed. Both logs in the downloadable XLSX with RAG colour coding and heat map matrix.</p>
+        </div>
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">Highest Risk</p>
+          <p class="f-sc-value">R001 / I001 — Rooftop Terrace. Impact 5, Likelihood 4. Score 20. Escalated to board.</p>
+        </div>
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">PRINCE2 Theme</p>
+          <p class="f-sc-value">Risk — distinction between risk (possible) and issue (confirmed) determines escalation route.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -863,7 +962,7 @@
 <!-- FEATURE 03 — RAG Reporting -->
 <section class="feature">
   <div class="wrap">
-    <div class="feature-grid">
+    <div class="feature-body">
       <div class="feat-txt">
         <p class="f-label">03 — Reporting</p>
         <h2 class="f-heading">RAG reporting built from evidence, not assumption</h2>
@@ -880,57 +979,28 @@
           <span class="f-tag">External Comms</span>
         </div>
       </div>
-      <div class="feat-img">
-        <!--
-          ★ IMAGE 3
-          Document: "(6a) Project Status Report (WP).pdf"
-          Page: 1 — HotelO24 Highlight Report, zoom ~110%
-          Show: RAG Status row (Overall/Scope/Resource/Timelines/Costs) + Progress Update bullets + Escalated Issues section
-          Dims: 536 × 680px (capture at 2× = 1072 × 1360px)
-          Clickable: YES → download PDF
-        -->
-        <a href="./Project-Status-Report-WP.pdf" download class="pdf-link">
-          <div class="img-ph" style="aspect-ratio:536/680; width:100%;">
-            <p class="ph-star">★ IMAGE 3 — CLICKABLE PDF</p>
-            <p class="ph-doc">
-              <strong>File:</strong> (6a) Project Status Report (WP).pdf<br>
-              <strong>Page:</strong> Page 1, zoom 110%<br>
-              <strong>Show:</strong> RAG Status row + Progress Update + Escalated Issues<br>
-              Replace this div with &lt;img&gt; inside the &lt;a class="pdf-link"&gt;
-            </p>
-          </div>
-          <div class="pdf-badge">↓ PDF</div>
-          <div class="pdf-hover">Download Status Report</div>
-        </a>
+      <div class="f-sidebar">
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">Artefacts</p>
+          <p class="f-sc-value"><strong>6a — RAG Highlight Reports &nbsp;·&nbsp; 6b — Paralympics Update</strong>Two concurrent project reports plus external governance communication to Lyon. All in the downloadable PDF.</p>
+        </div>
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">RAG Summary</p>
+          <p class="f-sc-value">HotelO24: Overall Amber, Resource Red. Gymnasium: Overall Amber, Costs Green only.</p>
+        </div>
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">PRINCE2 Theme</p>
+          <p class="f-sc-value">Progress — exception reporting triggers exception plans; reports enable governance decisions.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FEATURE 04 — Governance (image left) -->
+<!-- FEATURE 04 — Governance -->
 <section class="feature">
   <div class="wrap">
-    <div class="feature-grid img-first">
-      <div class="feat-img">
-        <!--
-          ★ IMAGE 4
-          Document: "(8) Team Structure & Governance (WP).pdf"
-          Capture: Full page. Both org trees visible — HotelO24 and Gymnasium.
-                   Both headings must appear.
-          Dims: 536 × 400px (capture at 2× = 1072 × 800px)
-          Clickable: YES → download PDF
-        -->
-        <div class="img-ph" style="aspect-ratio:536/400;">
-          <p class="ph-star">★ IMAGE 4</p>
-          <p class="ph-doc">
-            <strong>File:</strong> (8) Team Structure &amp; Governance (WP).pdf<br>
-            <strong>Show:</strong> Full page. Both org trees (HotelO24 + Gymnasium) visible.<br>
-            Both section headings must appear.<br>
-            <strong>Clickable:</strong> Yes → download PDF
-          </p>
-          <span class="ph-dims">536 × 400px</span>
-        </div>
-      </div>
+    <div class="feature-body">
       <div class="feat-txt">
         <p class="f-label">04 — Governance</p>
         <h2 class="f-heading">A clear chain of accountability for a programme under pressure</h2>
@@ -944,6 +1014,20 @@
           <span class="f-tag">Stakeholder Mapping</span>
         </div>
       </div>
+      <div class="f-sidebar">
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">Artefacts</p>
+          <p class="f-sc-value"><strong>8 — Team Structure &amp; Governance</strong>Org charts for both sub-projects. VACANT Site Manager flagged in both; escalation chain defined across the programme.</p>
+        </div>
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">Key Decision</p>
+          <p class="f-sc-value">VACANT Site Manager documented → justified contingency draw request (contractor rates £5–6k/mo vs. budgeted £3k).</p>
+        </div>
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">PRINCE2 Theme</p>
+          <p class="f-sc-value">Organisation — defined roles enable exception escalation; responsibility without authority creates delivery risk.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -951,7 +1035,7 @@
 <!-- FEATURE 05 — Budget & Stakeholders -->
 <section class="feature">
   <div class="wrap">
-    <div class="feature-grid">
+    <div class="feature-body">
       <div class="feat-txt">
         <p class="f-label">05 — Budget &amp; Stakeholder Management</p>
         <h2 class="f-heading">Budget gaps surfaced.<br>Stakeholders managed directly.</h2>
@@ -967,31 +1051,71 @@
           <span class="f-tag">Written Governance</span>
         </div>
       </div>
-      <div class="feat-img">
-        <!--
-          ★ IMAGE 5
-          Document: "(7) MANAGING STAKEHOLDERS (WP).pdf"
-          Capture: Full page. Email to Hotel Manager, browser at 80% zoom.
-                   Show To/From/Subject + all four reply sections:
-                   Build Timeline & Terrace Safety / IOC Legal Agreement /
-                   Marketing Materials / Induction Site Visit.
-          Dims: 536 × 680px (capture at 2× = 1072 × 1360px)
-          Clickable: YES → download PDF
-        -->
-        <a href="./Managing-Stakeholders-WP.pdf" download class="pdf-link">
-          <div class="img-ph" style="aspect-ratio:536/680; width:100%;">
-            <p class="ph-star">★ IMAGE 5 — CLICKABLE PDF</p>
-            <p class="ph-doc">
-              <strong>File:</strong> (7) MANAGING STAKEHOLDERS (WP).pdf<br>
-              <strong>Zoom:</strong> 80% to fit full email<br>
-              <strong>Show:</strong> To/From/Subject + all 4 reply sections<br>
-              Replace this div with &lt;img&gt; inside the &lt;a class="pdf-link"&gt;
-            </p>
-          </div>
-          <div class="pdf-badge">↓ PDF</div>
-          <div class="pdf-hover">Download Stakeholder Email</div>
-        </a>
+      <div class="f-sidebar">
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">Artefacts</p>
+          <p class="f-sc-value"><strong>2 — Budget Analysis &nbsp;·&nbsp; 7 — Stakeholder Email</strong>Six uncosted items identified; Hotel Manager response covering four live issues. Both documents in the downloadable PDF.</p>
+        </div>
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">Exposure Flagged</p>
+          <p class="f-sc-value">€1.5m post-Games conversion gap — largest unplanned cost; required board-level decision on funding.</p>
+        </div>
+        <div class="f-sidebar-cell">
+          <p class="f-sc-label">PRINCE2 Theme</p>
+          <p class="f-sc-value">Business Case — cost deviations must surface at PM level; contingency justification is governance, not guesswork.</p>
+        </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT ARTEFACTS DOWNLOAD SECTION -->
+<section class="artefacts" id="artefacts">
+  <div class="wrap">
+    <p class="section-eyebrow">Project Artefacts</p>
+    <h2 class="section-heading">Source documents<br>available to download.</h2>
+    <div class="artefact-grid">
+
+      <!-- XLSX CARD -->
+      <a href="project-templates-waterfall.xlsx" download class="artefact-card">
+        <span class="ac-type-badge xlsx">Excel · XLSX</span>
+        <h3 class="ac-title">PM Templates &amp; Logs</h3>
+        <p class="ac-filename">project-templates-waterfall.xlsx</p>
+        <div class="ac-divider"></div>
+        <p class="ac-contents-label">What's inside</p>
+        <ul class="ac-list">
+          <li>Gymnasium Project Plan — Gantt chart with colour-coded task status (complete, late, at-risk, on-track)</li>
+          <li>Risk Log — 8 formally scored risks with impact × likelihood matrix and RAG colour coding</li>
+          <li>Issue Log — 12 active issues with ownership, target dates, and RAG status</li>
+          <li>PM Actions Log — 10 priority-ranked actions (High / Medium) with owners and escalation notes</li>
+          <li>Risk Heat Map Matrix — 5×5 scoring grid with all risks plotted by score band</li>
+          <li>Risk Score chart — bar chart comparing risk exposure across R001–R008</li>
+        </ul>
+        <div class="ac-cta">
+          Download XLSX <span class="ac-arrow">→</span>
+        </div>
+      </a>
+
+      <!-- PDF CARD -->
+      <a href="project-artefacts-waterfall.pdf" download class="artefact-card">
+        <span class="ac-type-badge pdf">PDF · 14 Pages</span>
+        <h3 class="ac-title">Project Artefacts</h3>
+        <p class="ac-filename">project-artefacts-waterfall.pdf</p>
+        <div class="ac-divider"></div>
+        <p class="ac-contents-label">What's inside</p>
+        <ul class="ac-list">
+          <li>Project Status Reports — RAG Highlight Reports for both HotelO24 and Olympic Gymnasium (amber / red escalations)</li>
+          <li>Paralympics Programme Update — external monthly governance report to Programme Office, Lyon</li>
+          <li>Hotel Manager Stakeholder Response — structured written reply covering four live issues</li>
+          <li>Team Structure &amp; Governance — org charts for both sub-projects with VACANT Site Manager flagged</li>
+          <li>Project Planning — milestone gap analysis (10 missing milestones identified with source references)</li>
+          <li>Budget Analysis — six uncosted items, contingency justification, €1.5m conversion exposure</li>
+        </ul>
+        <div class="ac-cta">
+          Download PDF <span class="ac-arrow">→</span>
+        </div>
+      </a>
+
     </div>
   </div>
 </section>
@@ -1014,7 +1138,7 @@
           <tr>
             <td class="area">Project Planning<span class="ref">1a · 1b</span></td>
             <td>Critical path mapping, milestone gap analysis, sub-project task rationale</td>
-            <td class="outcome">8 missing milestones identified across both sub-projects before delivery began</td>
+            <td class="outcome">10 missing milestones identified across both sub-projects before delivery began</td>
           </tr>
           <tr>
             <td class="area">Budget<span class="ref">2</span></td>
@@ -1029,7 +1153,7 @@
           <tr>
             <td class="area">Issue Management<span class="ref">4</span></td>
             <td>Live issue tracking with owners, impact ratings, and target dates</td>
-            <td class="outcome">9 issues owned and targeted; I001 (terrace cert, Impact 5) escalated to board</td>
+            <td class="outcome">12 issues owned and targeted; I001 (terrace cert, Impact 5) escalated to board</td>
           </tr>
           <tr>
             <td class="area">Resource Management<span class="ref">5</span></td>
@@ -1057,9 +1181,9 @@
             <td class="outcome">VACANT Site Manager formally documented; escalation chain defined across both sub-projects</td>
           </tr>
           <tr>
-            <td class="area">PM Action Log<span class="ref">9</span></td>
+            <td class="area">PM Actions Log<span class="ref">9</span></td>
             <td>Priority-ranked actions with owners, sources, and rationale</td>
-            <td class="outcome">10 actions tracked; high/medium priority distinguished; escalation routes defined per action</td>
+            <td class="outcome">10 actions tracked; High/Medium priority distinguished; escalation routes defined per action</td>
           </tr>
           <tr>
             <td class="area">Communications<span class="ref">10</span></td>
