@@ -36,10 +36,18 @@
 
     /* ── NAV ── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
       padding: 20px var(--pad);
       display: flex; justify-content: space-between; align-items: center;
       background: linear-gradient(to bottom, rgba(10,10,10,0.98) 0%, transparent 100%);
+      pointer-events: all;
+      isolation: isolate;
+    }
+    nav a {
+      position: relative;
+      z-index: 9999;
+      pointer-events: all;
+      -webkit-tap-highlight-color: rgba(255,255,255,0.1);
     }
     .nav-logo {
       font-family: 'Syne', sans-serif;
@@ -60,7 +68,7 @@
       min-height: 75vh;
       display: flex; flex-direction: column; justify-content: flex-end;
       padding: 0 var(--pad) clamp(48px, 8vh, 80px);
-      position: relative; overflow: hidden;
+      position: relative;
     }
     /* hero image embedded */
     .hero-overlay {
@@ -281,6 +289,8 @@
     }
     .footer-note { font-size: 13px; color: var(--grey-3); max-width: 400px; line-height: 1.7; }
     .footer-cta {
+      position: relative;
+      pointer-events: all;
       font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
       letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--white); text-decoration: none;
