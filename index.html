@@ -106,8 +106,10 @@
     .cert-year { position:absolute; bottom:32px; right:32px; font-family:'Syne',sans-serif; font-weight:700; font-size:11px; color:var(--g3); }
     .cert-download { display:inline-flex; align-items:center; gap:6px; margin-top:20px; font-family:'Syne',sans-serif; font-size:10px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--g4); text-decoration:none; border:1px solid var(--g2); padding:8px 14px; border-radius:2px; transition:color 0.2s,border-color 0.2s,background 0.2s; }
     .cert-download:hover { color:var(--white); border-color:var(--g3); background:rgba(255,255,255,0.04); }
-    .cert-card--badge { position:relative; }
-    .cert-badge-img { position:absolute; top:50%; right:28px; transform:translateY(-60%); width:90px; height:90px; object-fit:contain; opacity:0.85; filter:drop-shadow(0 0 20px rgba(255,255,255,0.08)); pointer-events:none; }
+    .cert-card--badge { position:relative; overflow:hidden; padding:0; }
+    .cert-badge-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+    .cert-badge-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(8,8,8,0.97) 0%,rgba(8,8,8,0.6) 50%,rgba(8,8,8,0.15) 100%); }
+    .cert-badge-content { position:relative; z-index:2; padding:48px 36px; height:100%; display:flex; flex-direction:column; }
     .contact-inner { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
     .contact-title { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(36px,4vw,56px); letter-spacing:-0.03em; line-height:0.95; margin-bottom:28px; }
     .contact-title em { font-style:italic; font-weight:400; color:var(--g4); }
@@ -339,12 +341,17 @@
   </div>
   <div class="certs-grid reveal">
     <div class="cert-card cert-card--badge">
-      <img src="images/prince2-badge.png" alt="PRINCE2 Foundation Badge" class="cert-badge-img" onerror="this.style.display='none'"/>
-      <div class="cert-num">01</div>
-      <div class="cert-name">PRINCE2 Foundation</div>
-      <div class="cert-issuer">PeopleCert</div>
-      <a href="prince2-results.pdf" class="cert-download" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> View Results</a>
-      <div class="cert-year">2026</div>
+      <img src="images/prince2-badge.png" alt="PRINCE2 Foundation Badge" class="cert-badge-img"/>
+      <div class="cert-badge-overlay"></div>
+      <div class="cert-badge-content">
+        <div class="cert-num">01</div>
+        <div style="margin-top:auto;">
+          <div class="cert-name" style="text-shadow:0 1px 8px rgba(0,0,0,1);">PRINCE2 Foundation</div>
+          <div class="cert-issuer" style="text-shadow:0 1px 6px rgba(0,0,0,1);">PeopleCert</div>
+          <a href="prince2-results.pdf" class="cert-download" target="_blank"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> View Results</a>
+        </div>
+        <div class="cert-year">2026</div>
+      </div>
     </div>
     <div class="cert-card">
       <div class="cert-num">02</div>
