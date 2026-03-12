@@ -195,10 +195,8 @@
       .title-line { font-size:11px; }
     }
 
-    /* ── Progress bar ── */
     #progress-bar { position:fixed; top:0; left:0; height:1px; background:rgba(240,237,232,0.35); z-index:999; width:0%; transition:width 0.1s linear; }
 
-    /* ── Staggered reveal ── */
     .reveal-stagger { opacity:1; transform:none; transition:opacity 0.75s cubic-bezier(0.16,1,0.3,1),transform 0.75s cubic-bezier(0.16,1,0.3,1); }
     .js-anim .reveal-stagger { opacity:0; transform:translateY(28px); }
     .js-anim .reveal-stagger.visible { opacity:1; transform:translateY(0); }
@@ -207,7 +205,6 @@
     .reveal-stagger:nth-child(3) { transition-delay:0.18s; }
     .reveal-stagger:nth-child(4) { transition-delay:0.27s; }
 
-    /* ── Cert cards enhanced ── */
     .certs-grid { position:relative; }
     .cert-card { overflow:hidden; }
     .cert-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(240,237,232,0.18),transparent); transform:scaleX(0); transition:transform 0.5s cubic-bezier(0.16,1,0.3,1); transform-origin:left; }
@@ -223,7 +220,6 @@
     .cert-card--badge .cert-name-overlay { font-family:'Syne',sans-serif; font-weight:700; font-size:18px; line-height:1.2; letter-spacing:-0.01em; margin-bottom:8px; color:var(--white); }
     .cert-card--badge .cert-issuer-overlay { font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(240,237,232,0.5); font-family:'DM Sans',sans-serif; }
 
-    /* ── Contact section enhanced ── */
     #contact { position:relative; overflow:hidden; }
     #contact::before { content:''; position:absolute; top:-20%; right:-15%; width:600px; height:600px; background:radial-gradient(circle,rgba(255,255,255,0.022) 0%,transparent 65%); pointer-events:none; animation:glow-drift 12s ease-in-out infinite alternate; }
     #contact::after { content:''; position:absolute; bottom:-10%; left:5%; width:400px; height:400px; background:radial-gradient(circle,rgba(255,255,255,0.012) 0%,transparent 60%); pointer-events:none; animation:glow-drift 16s ease-in-out infinite alternate-reverse; }
@@ -235,21 +231,13 @@
     .contact-link > div, .contact-link > span { position:relative; z-index:1; }
     .contact-arrow { transition:transform 0.3s cubic-bezier(0.16,1,0.3,1), color 0.2s; }
     .contact-link:hover .contact-arrow { transform:translate(3px,-3px); color:var(--white); }
-    .contact-avail { display:flex; align-items:center; gap:10px; margin-top:28px; padding:16px 20px; border:1px solid var(--g2); border-radius:2px; background:rgba(255,255,255,0.015); width:fit-content; }
-    .contact-avail-dot { width:7px; height:7px; border-radius:50%; background:#4a7c59; box-shadow:0 0 8px #4a7c59; animation:pulse-dot 2s ease-in-out infinite; flex-shrink:0; }
-    .contact-avail-text { font-family:'Syne',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--g4); }
-    .contact-avail-text strong { color:var(--white); }
 
-    /* ── Section label line ── */
     .section-header { display:flex; align-items:center; gap:20px; margin-bottom:16px; }
     .section-header-line { flex:1; height:1px; background:linear-gradient(90deg,var(--rule),transparent); }
 
-    /* ── Skill pills staggered ── */
     .skill-pill { opacity:1; }
     .js-anim .skill-pill { opacity:0; animation:fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
-    .skills-wrap.visible .skill-pill { /* triggered by JS */ }
 
-    /* ── About section ── */
     .about-inner { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; min-width:0; overflow:hidden; }
     .about-bio { font-family:'DM Sans',sans-serif; font-size:clamp(15px,1.8vw,20px); font-weight:300; line-height:1.85; color:var(--g4); overflow-wrap:break-word; word-break:break-word; }
     .about-bio strong { color:var(--white); font-weight:500; }
@@ -262,13 +250,11 @@
     @media(max-width:960px) { .about-inner { grid-template-columns:1fr; gap:48px; } }
     @media(max-width:560px) { .about-stats { grid-template-columns:1fr 1fr; } }
 
-    /* ── Grouped skills ── */
     .skills-groups { display:grid; grid-template-columns:1fr 1fr 1fr; gap:40px; }
     .skill-group-label { font-family:'Syne',sans-serif; font-weight:700; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--g3); margin-bottom:20px; padding-bottom:12px; border-bottom:1px solid var(--rule); }
     .skill-group-pills { display:flex; flex-wrap:wrap; gap:8px; }
     @media(max-width:960px) { .skills-groups { grid-template-columns:1fr; gap:32px; } }
 
-    /* ── Footer status ── */
     .footer-status { display:flex; align-items:center; gap:8px; }
     .footer-status-dot { width:5px; height:5px; border-radius:50%; background:#4a7c59; box-shadow:0 0 6px #4a7c59; animation:pulse-dot 2.5s ease-in-out infinite; flex-shrink:0; }
     .footer-status-text { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--g3); font-family:'DM Sans',sans-serif; }
@@ -285,7 +271,7 @@
   <a href="#certifications" onclick="closeMenu()">Certifications</a>
   <a href="#contact" onclick="closeMenu()">Contact</a>
   <div class="mobile-menu-bottom">
-    <a href="/cdn-cgi/l/email-protection#1a68637b7437767b686e7f635a756f6e7675757134797577">Email</a>
+    <a href="#" id="mobile-email-link">Email</a>
     <a href="https://linkedin.com/in/ryanlartey" target="_blank">LinkedIn</a>
     <a href="cv.pdf">Download CV</a>
   </div>
@@ -315,7 +301,7 @@
     <div class="hero-bottom">
       <div>
         <div class="title-line"><strong>Project Manager</strong> &middot; <strong>Project Coordinator</strong> &middot; <strong>PMO Analyst</strong></div>
-        <div class="title-line" style="margin-top:8px;">4+ Years Commercial Delivery. <em style="font-style:italic;color:#444;font-weight:300;">Structure, methodology and results.</em></div>
+        <div class="title-line" style="margin-top:8px;">5+ Years Commercial Delivery. <em style="font-style:italic;color:#444;font-weight:300;">Structure, methodology and results.</em></div>
       </div>
       <div class="hero-right">
         <p class="hero-tagline">PRINCE2 Foundation &middot; AgilePM Foundation<br/>Built and shipped live systems.<br/>Not just studied for them.</p>
@@ -327,7 +313,7 @@
     </div>
   </div>
   <div class="hero-strip">
-    <div class="strip-item"><div class="strip-label">Experience</div><div class="strip-value">4+ Years Delivery</div></div>
+    <div class="strip-item"><div class="strip-label">Experience</div><div class="strip-value">5+ Years Delivery</div></div>
     <div class="strip-item"><div class="strip-label">Revenue Delivered</div><div class="strip-value">&pound;200K+</div></div>
     <div class="strip-item"><div class="strip-label">Certifications</div><div class="strip-value">PRINCE2 &middot; AgilePM</div></div>
     <div class="strip-item"><div class="strip-label">Live Systems Built</div><div class="strip-value">2 In Production</div></div>
@@ -370,8 +356,8 @@
     <div class="reveal">
       <div class="section-label">About</div>
       <h2 class="section-title" style="margin-bottom:32px;">The person<br/><em>behind the work</em></h2>
-      <p class="about-bio">I&rsquo;m a <strong>project management professional</strong> based across Kent and London, transitioning from four years of commercial delivery. I founded and ran an independent events agency, then built live operational systems at Haynes Brothers, all while working toward <strong>structured PM roles</strong> in tech and consulting.</p>
-      <p class="about-bio" style="margin-top:20px;">I hold <strong>PRINCE2 Foundation</strong> and <strong>AgilePM Foundation</strong> certifications, with PRINCE2 Practitioner next. I don&rsquo;t just study frameworks. <em>I build the tools that prove I understand them.</em></p>
+      <p class="about-bio">I&rsquo;m a <strong>project management professional</strong> based across Kent and London, transitioning from five years of commercial delivery. I founded and ran an independent events agency, then built live operational systems at Haynes Brothers, all while working toward <strong>structured PM roles</strong> across a range of sectors.</p>
+      <p class="about-bio" style="margin-top:20px;">I hold <strong>PRINCE2 Foundation</strong> and <strong>AgilePM Foundation</strong> certifications, with PMQ and PRINCE2 Practitioner currently in progress. I don&rsquo;t just study frameworks. <em>I build the tools that prove I understand them.</em></p>
     </div>
     <div class="about-stats reveal">
       <div class="about-stat">
@@ -383,7 +369,7 @@
         <div class="about-stat-label">Event Attendees<br/>Managed</div>
       </div>
       <div class="about-stat">
-        <div class="about-stat-num">4+</div>
+        <div class="about-stat-num">5+</div>
         <div class="about-stat-label">Years Commercial<br/>Delivery</div>
       </div>
       <div class="about-stat">
@@ -549,8 +535,8 @@
     </div>
     <div class="cert-card reveal-stagger">
       <div class="cert-num">04</div>
-      <div class="cert-name">ECBA &mdash; Entry Certificate in Business Analysis</div>
-      <div class="cert-issuer">IIBA</div>
+      <div class="cert-name">PRINCE2 Practitioner</div>
+      <div class="cert-issuer">PeopleCert &middot; AXELOS</div>
       <div class="cert-status cert-status--progress">In Progress</div>
       <div class="cert-year">2026</div>
     </div>
@@ -562,12 +548,11 @@
       <div class="section-label">Get In Touch</div>
       <h2 class="contact-title">Let's<br/><em>work together</em></h2>
       <p class="contact-p">Open to roles as a Project Manager, Project Coordinator, or PMO Analyst across Kent and London, available on-site or hybrid. Certified methodology, real delivery experience, and live systems already built and shipped.</p>
-      <div class="contact-avail"><div class="contact-avail-dot"></div><div class="contact-avail-text"><strong>Available Now</strong> &middot; 1 Week Notice Period</div></div>
     </div>
     <div class="contact-links reveal">
-      <a href="/cdn-cgi/l/email-protection#b5c7ccd4db98d9d4c7c1d0ccf5dac0c1d9dadade9bd6dad8" class="contact-link">
+      <a href="#" id="email-link" class="contact-link">
         <div class="contact-link-fill"></div>
-        <div><div class="contact-link-type">Email</div><div class="contact-link-value"><span class="__cf_email__" data-cfemail="02707b636c2f6e637076677b426d77766e6d6d692c616d6f">[email&#160;protected]</span></div></div>
+        <div><div class="contact-link-type">Email</div><div class="contact-link-value" id="email-display"></div></div>
         <span class="contact-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></span>
       </a>
       <a href="https://linkedin.com/in/ryanlartey" target="_blank" class="contact-link">
@@ -586,12 +571,21 @@
 <footer>
   <div class="footer-status">
     <div class="footer-status-dot"></div>
-    <span class="footer-status-text">Available Now &middot; 1 Week Notice Period</span>
+    <span class="footer-status-text">Available Now</span>
   </div>
   <span class="footer-copy">&copy; 2026 Ryan Lartey</span>
   <button class="footer-back" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></button>
 </footer>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+  var u = 'ryan-lartey';
+  var d = 'outlook.com';
+  var el = document.getElementById('email-link');
+  var display = document.getElementById('email-display');
+  var mobileEl = document.getElementById('mobile-email-link');
+  el.href = 'mailto:' + u + '@' + d;
+  display.textContent = u + '@' + d;
+  mobileEl.href = 'mailto:' + u + '@' + d;
+
   document.body.classList.add('js-anim');
   function toggleMenu() {
     var menu = document.getElementById('mobileMenu');
@@ -634,15 +628,11 @@
   var obs = new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } }); }, {threshold:0, rootMargin:'0px 0px -20px 0px'});
   document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
 
-
-
-  // Staggered cert cards
   var staggerObs = new IntersectionObserver(function(entries){
     entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); staggerObs.unobserve(e.target); } });
   }, {threshold:0.05, rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.reveal-stagger').forEach(function(el){ staggerObs.observe(el); });
 
-  // Skill pills staggered on section visible
   var pillObs = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
       if(e.isIntersecting){
@@ -654,29 +644,12 @@
   }, {threshold:0.1});
   document.querySelectorAll('.skills-wrap').forEach(function(el){ pillObs.observe(el); });
 
-  // Reading progress bar
   var pb = document.getElementById('progress-bar');
   window.addEventListener('scroll', function(){
     var s = document.documentElement.scrollTop || document.body.scrollTop;
     var h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     pb.style.width = (s/h*100)+'%';
   });
-
-  // Count-up animation
-  function countUp(el) {
-    var target = parseInt(el.dataset.count);
-    var suffix = el.dataset.suffix || '';
-    var prefix = el.dataset.prefix || '';
-    var duration = 1600;
-    var start = performance.now();
-    function step(now) {
-      var p = Math.min((now - start) / duration, 1);
-      var ease = 1 - Math.pow(1 - p, 3);
-      var val = Math.floor(ease * target);
-      el.textContent = prefix + val.toLocaleString() + suffix;
-      if (p < 1) requestAnimationFrame(step);
-      else el.textContent = prefix + target.toLocaleString() + suffix;
-    }
-    requestAnimationFrame(step);
-  }
-  var countObs = new IntersectionObserver(funct
+</script>
+</body>
+</html>
