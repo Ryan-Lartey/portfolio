@@ -15,14 +15,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
 
-  <!-- Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
 
   <style>
-    /* ── RESET ───────────────────────────────────────────── */
+    /* ── RESET & TOKENS ──────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --black: #080808;
@@ -35,7 +33,7 @@
       --rule: rgba(255,255,255,0.07);
       --pad: clamp(24px, 5vw, 72px);
     }
-    html { scroll-behavior: auto; }
+    html { scroll-behavior: smooth; }
     body {
       background: var(--black);
       color: var(--white);
@@ -46,53 +44,74 @@
       cursor: none;
     }
 
-    /* ── GRAIN ───────────────────────────────────────────── */
-    .grain {
+    /* ── GRAIN (lightweight fixed texture) ───────────────── */
+    body::after {
+      content: '';
       position: fixed; inset: -50%; width: 200%; height: 200%;
-      pointer-events: none; z-index: 9990; opacity: 0.042;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9990; opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)'/%3E%3C/svg%3E");
       animation: grain 8s steps(8) infinite;
     }
     @keyframes grain {
-      0%   { transform: translate(0,0) }      12%  { transform: translate(-5%,4%) }
-      25%  { transform: translate(5%,-4%) }   37%  { transform: translate(-4%,-5%) }
-      50%  { transform: translate(4%,3%) }    62%  { transform: translate(-3%,5%) }
-      75%  { transform: translate(3%,-3%) }   87%  { transform: translate(-4%,4%) }
-      100% { transform: translate(0,0) }
+      0%{transform:translate(0,0)} 12%{transform:translate(-5%,4%)} 25%{transform:translate(5%,-4%)}
+      37%{transform:translate(-4%,-5%)} 50%{transform:translate(4%,3%)} 62%{transform:translate(-3%,5%)}
+      75%{transform:translate(3%,-3%)} 87%{transform:translate(-4%,4%)} 100%{transform:translate(0,0)}
     }
 
-    /* ── AMBIENT CANVAS ──────────────────────────────────── */
-    #ambient {
-      position: fixed; inset: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: 0;
+    /* ── AMBIENT ORBS (CSS-only, GPU transform — zero redraws) */
+    .ambient {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
     }
+    .orb {
+      position: absolute; border-radius: 50%;
+      will-change: transform; pointer-events: none;
+    }
+    .orb-1 {
+      width: 900px; height: 900px; top: -20%; left: -18%;
+      background: radial-gradient(circle, rgba(255,255,255,0.024) 0%, transparent 65%);
+      animation: orb-a 22s ease-in-out infinite alternate;
+    }
+    .orb-2 {
+      width: 800px; height: 800px; bottom: -25%; right: -15%;
+      background: radial-gradient(circle, rgba(255,255,255,0.017) 0%, transparent 65%);
+      animation: orb-b 28s ease-in-out infinite alternate;
+    }
+    .orb-3 {
+      width: 600px; height: 600px; top: 35%; left: 38%;
+      background: radial-gradient(circle, rgba(255,255,255,0.011) 0%, transparent 65%);
+      animation: orb-a 18s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes orb-a { from{transform:translate(0,0)} to{transform:translate(8%,11%)} }
+    @keyframes orb-b { from{transform:translate(0,0)} to{transform:translate(-7%,-9%)} }
 
     /* ── PROGRESS BAR ────────────────────────────────────── */
     #progress {
       position: fixed; top: 0; left: 0; height: 1px;
-      background: rgba(240,237,232,0.45); z-index: 9995;
-      width: 0%; pointer-events: none;
+      background: rgba(240,237,232,0.4); z-index: 9995;
+      width: 0%; pointer-events: none; transition: width 0.1s linear;
     }
 
     /* ── CURSOR ──────────────────────────────────────────── */
     #cur {
       position: fixed; top: 0; left: 0; z-index: 9999;
-      width: 8px; height: 8px; background: var(--white); border-radius: 50%;
-      pointer-events: none; transform: translate(-50%,-50%);
-      mix-blend-mode: difference; transition: width .25s, height .25s;
-      will-change: transform;
+      width: 8px; height: 8px; background: var(--white);
+      border-radius: 50%; pointer-events: none;
+      transform: translate(-50%,-50%);
+      will-change: left, top;
     }
     #cur-ring {
       position: fixed; top: 0; left: 0; z-index: 9998;
-      width: 36px; height: 36px;
-      border: 1px solid rgba(240,237,232,0.28); border-radius: 50%;
+      width: 34px; height: 34px;
+      border: 1px solid rgba(240,237,232,0.3); border-radius: 50%;
       pointer-events: none; transform: translate(-50%,-50%);
-      transition: width .45s cubic-bezier(.16,1,.3,1), height .45s cubic-bezier(.16,1,.3,1), border-color .3s;
-      will-change: transform;
+      transition: width .4s cubic-bezier(.16,1,.3,1),
+                  height .4s cubic-bezier(.16,1,.3,1),
+                  border-color .3s;
+      will-change: left, top;
     }
-    #cur.big { width: 5px; height: 5px; }
-    #cur-ring.big { width: 58px; height: 58px; border-color: rgba(240,237,232,0.5); }
-    @media (hover:none) { #cur,#cur-ring { display: none !important; } body { cursor: auto; } }
+    #cur.big   { width: 5px; height: 5px; }
+    #cur-ring.big { width: 56px; height: 56px; border-color: rgba(240,237,232,0.48); }
+    @media (hover:none) { #cur, #cur-ring { display:none!important; } body { cursor:auto; } }
 
     /* ── NAV ─────────────────────────────────────────────── */
     nav {
@@ -103,10 +122,9 @@
       border-bottom: 1px solid transparent;
     }
     nav.scrolled {
-      background: rgba(8,8,8,0.93); backdrop-filter: blur(20px);
+      background: rgba(8,8,8,0.94); backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      padding: 18px var(--pad);
-      border-bottom-color: var(--rule);
+      padding: 18px var(--pad); border-bottom-color: var(--rule);
     }
     .nav-logo {
       font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14px;
@@ -176,13 +194,13 @@
     }
     .hero-eyebrow {
       display: flex; align-items: center; gap: 16px;
-      margin-bottom: 40px; overflow: hidden;
+      margin-bottom: 40px;
     }
     .eyebrow-line { width: 48px; height: 1px; background: var(--g3); flex-shrink: 0; }
     .eyebrow-text { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--g4); }
     .hero-name {
       font-family: 'Syne', sans-serif; font-weight: 800;
-      font-size: clamp(76px,12.5vw,180px);
+      font-size: clamp(76px, 12.5vw, 180px);
       letter-spacing: -0.048em; line-height: .88;
       margin-bottom: 60px;
     }
@@ -200,20 +218,26 @@
     }
     .title-line strong { color: var(--white); font-weight: 700; }
     .hero-right { display: flex; flex-direction: column; align-items: flex-end; gap: 20px; }
-    .hero-tagline {
-      font-size: 13px; color: var(--g5); text-align: right;
-      max-width: 280px; line-height: 1.85;
-      border-left: 1px solid var(--g3); padding-left: 16px;
-    }
     .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+
+    /* Scroll indicator */
     .scroll-hint {
-      position: absolute; bottom: 100px; right: 0;
+      position: absolute; bottom: 104px; right: 0; z-index: 1;
       display: flex; flex-direction: column; align-items: center; gap: 10px;
-      opacity: 0; /* GSAP */
     }
-    .scroll-hint-label { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: var(--g4); writing-mode: vertical-rl; }
-    .scroll-hint-line { width: 1px; height: 48px; background: linear-gradient(to bottom, var(--g3), transparent); animation: scroll-drop 1.8s ease-in-out infinite; }
-    @keyframes scroll-drop { 0%,100%{transform:scaleY(1);transform-origin:top} 50%{transform:scaleY(0.3);transform-origin:bottom} }
+    .scroll-hint-line {
+      width: 1px; height: 52px;
+      background: linear-gradient(to bottom, var(--g3), transparent);
+      animation: sdrop 2s ease-in-out infinite;
+    }
+    .scroll-hint-label {
+      font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--g4); writing-mode: vertical-rl;
+    }
+    @keyframes sdrop {
+      0%,100% { transform:scaleY(1); transform-origin:top; opacity:.7; }
+      50%      { transform:scaleY(.35); transform-origin:bottom; opacity:.4; }
+    }
 
     /* Buttons */
     .btn-primary {
@@ -262,7 +286,7 @@
       content: ''; position: absolute; top: 0; bottom: 0; width: 100px; z-index: 2; pointer-events: none;
     }
     .marquee-wrap::before { left: 0; background: linear-gradient(to right, var(--black), transparent); }
-    .marquee-wrap::after { right: 0; background: linear-gradient(to left, var(--black), transparent); }
+    .marquee-wrap::after  { right: 0; background: linear-gradient(to left,  var(--black), transparent); }
     .marquee-track { display: flex; width: max-content; animation: marquee 38s linear infinite; }
     .marquee-track:hover { animation-play-state: paused; }
     .marquee-group { display: flex; align-items: center; flex-shrink: 0; }
@@ -280,8 +304,8 @@
     .section-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--g3); margin-bottom: 16px; }
     .section-title {
       font-family: 'Syne', sans-serif; font-weight: 800;
-      font-size: clamp(40px,5.5vw,72px); letter-spacing: -.035em; line-height: .93;
-      margin-bottom: 72px; overflow: hidden;
+      font-size: clamp(40px,5.5vw,72px); letter-spacing: -.035em;
+      line-height: .93; margin-bottom: 72px;
     }
     .section-title em { font-style: italic; font-weight: 400; color: var(--g4); }
 
@@ -320,18 +344,16 @@
     .project-card {
       display: block; position: relative; overflow: hidden;
       aspect-ratio: 4/3; background: var(--black); text-decoration: none;
-      transform-style: preserve-3d;
     }
     .project-card.full { grid-column: 1/-1; aspect-ratio: 21/8; }
     .project-card img {
       width: 100%; height: 100%; object-fit: cover; display: block;
       transition: transform .9s cubic-bezier(.16,1,.3,1); will-change: transform;
     }
-    .project-card:hover img { transform: scale(1.07); }
+    .project-card:hover img { transform: scale(1.06); }
     .card-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(8,8,8,.98) 0%, rgba(8,8,8,.8) 40%, rgba(8,8,8,.15) 70%, transparent 100%);
-      transition: opacity .4s;
     }
     .card-content {
       position: absolute; bottom: 0; left: 0; right: 0; padding: 28px 32px;
@@ -357,12 +379,11 @@
       transition: border-color .35s; pointer-events: none; z-index: 4;
     }
     .project-card:hover::after { border-color: rgba(240,237,232,.12); }
-    .img-ph { width: 100%; height: 100%; background: var(--g1); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+    .img-ph { width: 100%; height: 100%; background: var(--g1); display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .img-ph-label { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--g3); font-family: 'Syne', sans-serif; font-weight: 700; }
 
     /* ── SKILLS ──────────────────────────────────────────── */
     .skills-groups { display: grid; grid-template-columns: repeat(3,1fr); gap: 52px; }
-    .skill-group {}
     .skill-group-label {
       font-family: 'Syne', sans-serif; font-weight: 700; font-size: 10px;
       letter-spacing: .22em; text-transform: uppercase; color: var(--g3);
@@ -408,10 +429,16 @@
     .cert-status--earned::before { content: ''; display: block; width: 5px; height: 5px; border-radius: 50%; background: #4a7c59; box-shadow: 0 0 8px #4a7c59; animation: pdot 2.5s ease-in-out infinite; }
     @keyframes pdot { 0%,100%{opacity:1;box-shadow:0 0 6px #4a7c59} 50%{opacity:.5;box-shadow:0 0 16px #4a7c59} }
     .cert-year { position: absolute; bottom: 36px; right: 36px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 10px; color: var(--g3); }
-    .cert-download { display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--g4); text-decoration: none; border: 1px solid var(--g2); padding: 8px 14px; transition: color .2s, border-color .2s, background .2s; }
+    .cert-download {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 20px;
+      font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--g4);
+      text-decoration: none; border: 1px solid var(--g2); padding: 8px 14px;
+      transition: color .2s, border-color .2s, background .2s;
+    }
     .cert-download:hover { color: var(--white); border-color: var(--g3); background: rgba(255,255,255,.04); }
 
-    /* Badge card — PRINCE2 */
+    /* Badge card */
     .cert-card--badge { padding: 0; }
     .cert-badge-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; opacity: .85; }
     .cert-badge-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,8,8,.97) 0%, rgba(8,8,8,.9) 30%, rgba(8,8,8,.15) 70%, rgba(8,8,8,.04) 100%); }
@@ -419,17 +446,17 @@
     .cert-name-overlay { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 20px; line-height: 1.2; letter-spacing: -.02em; margin-bottom: 8px; color: var(--white); }
     .cert-issuer-overlay { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(240,237,232,.5); font-family: 'DM Sans', sans-serif; }
 
-    /* AgilePM card — styled watermark */
+    /* AgilePM watermark card */
     .cert-card--agile { background: var(--g1); }
     .cert-card--agile:hover { background: var(--g2); }
     .cert-watermark {
       position: absolute; right: -10px; bottom: -20px;
       font-family: 'Syne', sans-serif; font-weight: 800;
       font-size: 100px; letter-spacing: -.05em; line-height: .9;
-      color: rgba(255,255,255,.025); pointer-events: none;
-      user-select: none; text-align: right; transition: color .4s;
+      color: rgba(255,255,255,.025); pointer-events: none; user-select: none;
+      text-align: right; transition: color .4s;
     }
-    .cert-card--agile:hover .cert-watermark { color: rgba(255,255,255,.04); }
+    .cert-card--agile:hover .cert-watermark { color: rgba(255,255,255,.045); }
 
     /* ── CONTACT ─────────────────────────────────────────── */
     #contact { overflow: hidden; }
@@ -485,11 +512,13 @@
     }
     .footer-back:hover { color: var(--white); }
 
+    /* ── GSAP initial states ─────────────────────────────── */
+    .gsap-hidden { opacity: 0; transform: translateY(32px); }
+
     /* ── RESPONSIVE ──────────────────────────────────────── */
     @media (max-width: 1100px) { .skills-groups { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 900px) {
-      nav { padding-left: 24px; padding-right: 24px; }
-      nav.scrolled { padding-left: 24px; padding-right: 24px; }
+      nav, nav.scrolled { padding-left: 24px; padding-right: 24px; }
       .nav-links { display: none; }
       .nav-burger { display: flex; }
       .hero { padding: 0 24px; }
@@ -498,12 +527,10 @@
       .strip-item { padding: 16px 24px; }
       .hero-bottom { flex-direction: column; align-items: flex-start; gap: 24px; }
       .hero-right { align-items: flex-start; }
-      .hero-tagline { text-align: left; max-width: 100%; }
       .scroll-hint { display: none; }
       section { padding: 72px 24px; }
       .section-title { margin-bottom: 48px; }
       .about-inner { grid-template-columns: 1fr; gap: 48px; }
-      .about-stats { grid-template-columns: 1fr 1fr; }
       .projects-grid { grid-template-columns: 1fr; }
       .project-card.full { grid-column: auto; aspect-ratio: 4/3; }
       .skills-groups { grid-template-columns: 1fr; gap: 32px; }
@@ -533,8 +560,13 @@
 </head>
 <body>
 
-<canvas id="ambient"></canvas>
-<div class="grain"></div>
+<!-- Ambient CSS orbs -->
+<div class="ambient" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
 <div id="progress"></div>
 <div id="cur"></div>
 <div id="cur-ring"></div>
@@ -572,7 +604,7 @@
 <!-- Hero -->
 <div class="hero">
   <div class="hero-body">
-    <div class="hero-eyebrow">
+    <div class="hero-eyebrow gsap-hidden">
       <div class="eyebrow-line"></div>
       <span class="eyebrow-text">CI Specialist &middot; ID Logistics UK &middot; United Kingdom</span>
     </div>
@@ -580,7 +612,7 @@
       <span class="hero-name-line">Ryan</span>
       <span class="hero-name-line">Lartey.</span>
     </h1>
-    <div class="hero-bottom">
+    <div class="hero-bottom gsap-hidden">
       <div class="title-stack">
         <div class="title-line"><strong>Continuous Improvement Specialist</strong> &middot; <strong>Operations</strong> &middot; <strong>AI &amp; Automation</strong></div>
         <div class="title-line">Lean &middot; Process Optimisation &middot; PRINCE2. <em style="color:var(--g4);font-style:italic;">Built the tools. Ran the workshops. Shipped the systems.</em></div>
@@ -596,11 +628,11 @@
       </div>
     </div>
   </div>
-  <div class="scroll-hint" id="scrollHint">
+  <div class="scroll-hint gsap-hidden">
     <div class="scroll-hint-line"></div>
     <span class="scroll-hint-label">Scroll</span>
   </div>
-  <div class="hero-strip">
+  <div class="hero-strip gsap-hidden">
     <div class="strip-item"><div class="strip-label">Current Role</div><div class="strip-value">CI Specialist &middot; IDL</div></div>
     <div class="strip-item"><div class="strip-label">Methodology</div><div class="strip-value">Lean &middot; Process Improvement</div></div>
     <div class="strip-item"><div class="strip-label">Certifications</div><div class="strip-value">PRINCE2 &middot; AgilePM</div></div>
@@ -644,27 +676,27 @@
 
 <!-- About -->
 <section id="about">
-  <div class="section-label js-label">About</div>
-  <h2 class="section-title js-title">The person<br/><em>behind the work</em></h2>
+  <div class="section-label gsap-hidden">About</div>
+  <h2 class="section-title gsap-hidden">The person<br/><em>behind the work</em></h2>
   <div class="about-inner">
-    <div class="js-fade">
+    <div class="gsap-hidden">
       <p class="about-bio">I&rsquo;m a <strong>Continuous Improvement Specialist</strong> at ID Logistics UK, leading CI initiatives across a high-volume warehouse operation. I identify inefficiencies, map workflows, analyse KPIs, and drive measurable process change using <strong>Lean and structured improvement methodologies.</strong></p>
       <p class="about-bio">Before that, I built and deployed <strong>Warranty LocatR</strong> at Haynes Brothers — a full-stack internal web app that replaced a manual parts tracking process — and managed inventory and logistics across a national tyre distribution network at Stapleton&rsquo;s. I hold <strong>PRINCE2 Foundation</strong> and <strong>AgilePM Foundation</strong> certifications. <em>I don&rsquo;t just study frameworks. I build the tools that prove I understand them.</em></p>
     </div>
-    <div class="about-stats js-stagger">
-      <div class="stat-cell">
+    <div class="about-stats">
+      <div class="stat-cell gsap-hidden">
         <div class="stat-num" data-count="7" data-suffix="+">7+</div>
         <div class="stat-label">Years Commercial<br/>Experience</div>
       </div>
-      <div class="stat-cell">
+      <div class="stat-cell gsap-hidden">
         <div class="stat-num" data-count="2">2</div>
         <div class="stat-label">Live Systems<br/>Built &amp; Deployed</div>
       </div>
-      <div class="stat-cell">
+      <div class="stat-cell gsap-hidden">
         <div class="stat-num" data-count="146" data-prefix="£" data-suffix="K+">£146K+</div>
         <div class="stat-label">Revenue from<br/>a Single Client</div>
       </div>
-      <div class="stat-cell">
+      <div class="stat-cell gsap-hidden">
         <div class="stat-num" data-count="3">3</div>
         <div class="stat-label">Sectors: Auto,<br/>Logistics, Events</div>
       </div>
@@ -674,10 +706,10 @@
 
 <!-- Projects -->
 <section id="projects">
-  <div class="section-label js-label">Selected Work</div>
-  <h2 class="section-title js-title">Projects that <em>ship and perform</em></h2>
-  <div class="projects-grid js-cards">
-    <a href="projects/straight-into-midlands.html" class="project-card">
+  <div class="section-label gsap-hidden">Selected Work</div>
+  <h2 class="section-title gsap-hidden">Projects that <em>ship and perform</em></h2>
+  <div class="projects-grid">
+    <a href="projects/straight-into-midlands.html" class="project-card gsap-hidden">
       <img src="images/sim.jpg" alt="ONLINEVENTSPR" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="img-ph" style="display:none;position:absolute;inset:0;"><div class="img-ph-label">ONLINEVENTSPR</div></div>
       <div class="card-overlay"></div>
@@ -688,7 +720,7 @@
       </div>
       <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#080808" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
     </a>
-    <a href="projects/prince2-study-app.html" class="project-card">
+    <a href="projects/prince2-study-app.html" class="project-card gsap-hidden">
       <img src="images/prince2-app.jpg" alt="PRINCE2 Study App" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="img-ph" style="display:none;position:absolute;inset:0;"><div class="img-ph-label">PRINCE2 App</div></div>
       <div class="card-overlay"></div>
@@ -699,7 +731,7 @@
       </div>
       <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#080808" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
     </a>
-    <a href="projects/warranty-locatr.html" class="project-card full">
+    <a href="projects/warranty-locatr.html" class="project-card full gsap-hidden">
       <img src="images/warranty-locatr.jpg" alt="Warranty LocatR" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="img-ph" style="display:none;position:absolute;inset:0;"><div class="img-ph-label">Warranty LocatR</div></div>
       <div class="card-overlay"></div>
@@ -710,7 +742,7 @@
       </div>
       <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#080808" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
     </a>
-    <a href="projects/ecommerce-app-refresh.html" class="project-card">
+    <a href="projects/ecommerce-app-refresh.html" class="project-card gsap-hidden">
       <img src="images/ecommerce.jpg" alt="Agile Product Delivery" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="img-ph" style="display:none;position:absolute;inset:0;"><div class="img-ph-label">Agile Delivery</div></div>
       <div class="card-overlay"></div>
@@ -721,7 +753,7 @@
       </div>
       <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#080808" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
     </a>
-    <a href="projects/hotelo24-construction.html" class="project-card">
+    <a href="projects/hotelo24-construction.html" class="project-card gsap-hidden">
       <img src="images/hotel.jpg" alt="Hotel Development Programme" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="img-ph" style="display:none;position:absolute;inset:0;"><div class="img-ph-label">Hotel Programme</div></div>
       <div class="card-overlay"></div>
@@ -737,52 +769,37 @@
 
 <!-- Skills -->
 <section id="skills">
-  <div class="section-label js-label">Expertise</div>
-  <h2 class="section-title js-title">Skills &amp; <em>Toolset</em></h2>
+  <div class="section-label gsap-hidden">Expertise</div>
+  <h2 class="section-title gsap-hidden">Skills &amp; <em>Toolset</em></h2>
   <div class="skills-groups">
-    <div class="skill-group js-fade">
+    <div class="skill-group gsap-hidden">
       <div class="skill-group-label">Continuous Improvement</div>
       <div class="skill-group-pills">
-        <span class="skill-pill">Lean Methodology</span>
-        <span class="skill-pill">PDCA</span>
-        <span class="skill-pill">Value Stream Mapping</span>
-        <span class="skill-pill">Root Cause Analysis</span>
-        <span class="skill-pill">Process Mapping</span>
-        <span class="skill-pill">KPI Analysis</span>
-        <span class="skill-pill">Workshop Facilitation</span>
-        <span class="skill-pill">Change Management</span>
-        <span class="skill-pill">Coaching &amp; Upskilling</span>
-        <span class="skill-pill">Operational Excellence</span>
+        <span class="skill-pill">Lean Methodology</span><span class="skill-pill">PDCA</span>
+        <span class="skill-pill">Value Stream Mapping</span><span class="skill-pill">Root Cause Analysis</span>
+        <span class="skill-pill">Process Mapping</span><span class="skill-pill">KPI Analysis</span>
+        <span class="skill-pill">Workshop Facilitation</span><span class="skill-pill">Change Management</span>
+        <span class="skill-pill">Coaching &amp; Upskilling</span><span class="skill-pill">Operational Excellence</span>
       </div>
     </div>
-    <div class="skill-group js-fade">
+    <div class="skill-group gsap-hidden">
       <div class="skill-group-label">Project Management</div>
       <div class="skill-group-pills">
-        <span class="skill-pill">PRINCE2</span>
-        <span class="skill-pill">AgilePM</span>
-        <span class="skill-pill">Agile Delivery</span>
-        <span class="skill-pill">Waterfall Delivery</span>
-        <span class="skill-pill">Scrum</span>
-        <span class="skill-pill">Sprint Planning</span>
-        <span class="skill-pill">Risk Management</span>
-        <span class="skill-pill">RAID Management</span>
-        <span class="skill-pill">Stakeholder Management</span>
-        <span class="skill-pill">Requirements Gathering</span>
+        <span class="skill-pill">PRINCE2</span><span class="skill-pill">AgilePM</span>
+        <span class="skill-pill">Agile Delivery</span><span class="skill-pill">Waterfall Delivery</span>
+        <span class="skill-pill">Scrum</span><span class="skill-pill">Sprint Planning</span>
+        <span class="skill-pill">Risk Management</span><span class="skill-pill">RAID Management</span>
+        <span class="skill-pill">Stakeholder Management</span><span class="skill-pill">Requirements Gathering</span>
       </div>
     </div>
-    <div class="skill-group js-fade">
+    <div class="skill-group gsap-hidden">
       <div class="skill-group-label">Tools &amp; Tech</div>
       <div class="skill-group-pills">
-        <span class="skill-pill">Node.js</span>
-        <span class="skill-pill">React</span>
-        <span class="skill-pill">SQLite</span>
-        <span class="skill-pill">LLM APIs</span>
-        <span class="skill-pill">Anthropic API</span>
-        <span class="skill-pill">Microsoft Excel</span>
-        <span class="skill-pill">Power BI</span>
-        <span class="skill-pill">SQL</span>
-        <span class="skill-pill">Jira</span>
-        <span class="skill-pill">SharePoint</span>
+        <span class="skill-pill">Node.js</span><span class="skill-pill">React</span>
+        <span class="skill-pill">SQLite</span><span class="skill-pill">LLM APIs</span>
+        <span class="skill-pill">Anthropic API</span><span class="skill-pill">Microsoft Excel</span>
+        <span class="skill-pill">Power BI</span><span class="skill-pill">SQL</span>
+        <span class="skill-pill">Jira</span><span class="skill-pill">SharePoint</span>
       </div>
     </div>
   </div>
@@ -790,10 +807,10 @@
 
 <!-- Certifications -->
 <section id="certifications">
-  <div class="section-label js-label">Credentials</div>
-  <h2 class="section-title js-title">Certifications &amp; <em>Training</em></h2>
+  <div class="section-label gsap-hidden">Credentials</div>
+  <h2 class="section-title gsap-hidden">Certifications &amp; <em>Training</em></h2>
   <div class="certs-grid">
-    <div class="cert-card cert-card--badge js-fade">
+    <div class="cert-card cert-card--badge gsap-hidden">
       <img src="images/prince2-badge.png" alt="PRINCE2 Foundation Badge" class="cert-badge-img"/>
       <div class="cert-badge-overlay"></div>
       <div class="cert-badge-content">
@@ -810,7 +827,7 @@
         <div class="cert-year">2026</div>
       </div>
     </div>
-    <div class="cert-card cert-card--agile js-fade">
+    <div class="cert-card cert-card--agile gsap-hidden">
       <div class="cert-watermark">AGILE<br/>PM</div>
       <div class="cert-num">02</div>
       <div class="cert-name">AgilePM Foundation</div>
@@ -824,12 +841,12 @@
 <!-- Contact -->
 <section id="contact">
   <div class="contact-inner">
-    <div class="js-fade">
+    <div class="gsap-hidden">
       <div class="section-label">Get In Touch</div>
       <h2 class="contact-title">Let&rsquo;s<br/><em>work together</em></h2>
       <p class="contact-p">CI Specialist with a track record across warehouse operations, logistics, and self-built production systems. Certified in PRINCE2 and AgilePM, with a growing focus on applying AI and automation to operational problems.</p>
     </div>
-    <div class="contact-links js-fade">
+    <div class="contact-links gsap-hidden">
       <a href="#" id="email-link" class="contact-link">
         <div class="contact-link-fill"></div>
         <div><div class="contact-link-type">Email</div><div class="contact-link-value" id="email-display"></div></div>
@@ -859,163 +876,52 @@
 </footer>
 
 <script>
-/* ── EMAIL OBFUSCATION ──────────────────────────────────── */
+/* ── EMAIL ───────────────────────────────────────────────── */
 (function(){
   var u='ryan-lartey', d='outlook.com';
-  var el=document.getElementById('email-link');
-  var disp=document.getElementById('email-display');
-  var mob=document.getElementById('mob-email');
-  el.href='mailto:'+u+'@'+d;
-  disp.textContent=u+'@'+d;
-  mob.href='mailto:'+u+'@'+d;
+  document.getElementById('email-link').href = 'mailto:'+u+'@'+d;
+  document.getElementById('email-display').textContent = u+'@'+d;
+  document.getElementById('mob-email').href = 'mailto:'+u+'@'+d;
 })();
 
-/* ── LENIS SMOOTH SCROLL ────────────────────────────────── */
-const lenis = new Lenis({
-  duration: 1.25,
-  easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-  smoothTouch: false
-});
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add(time => lenis.raf(time * 1000));
-gsap.ticker.lagSmoothing(0);
-
-/* ── CANVAS AMBIENT ORBS ────────────────────────────────── */
-(function(){
-  const cvs = document.getElementById('ambient');
-  const ctx = cvs.getContext('2d');
-  let W, H;
-  const orbs = [
-    { xp:.15, yp:.25, r:700, a:.022, s:.00025 },
-    { xp:.88, yp:.72, r:800, a:.016, s:-.00018 },
-    { xp:.5,  yp:.5,  r:550, a:.013, s:.00013 },
-    { xp:.25, yp:.85, r:450, a:.01,  s:-.0002 }
-  ];
-  function resize(){ W=cvs.width=window.innerWidth; H=cvs.height=window.innerHeight; }
-  resize();
-  window.addEventListener('resize', resize);
-  function frame(t){
-    ctx.clearRect(0,0,W,H);
-    orbs.forEach((o,i)=>{
-      const ox = Math.sin(t*o.s + i*2.1)*0.09;
-      const oy = Math.cos(t*o.s*0.7 + i*1.4)*0.07;
-      const x=(o.xp+ox)*W, y=(o.yp+oy)*H;
-      const g=ctx.createRadialGradient(x,y,0,x,y,o.r);
-      g.addColorStop(0,`rgba(255,255,255,${o.a})`);
-      g.addColorStop(1,'rgba(255,255,255,0)');
-      ctx.fillStyle=g;
-      ctx.fillRect(0,0,W,H);
-    });
-    requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-})();
-
-/* ── GSAP HERO ENTRANCE ─────────────────────────────────── */
+/* ── GSAP + ScrollTrigger ────────────────────────────────── */
 gsap.registerPlugin(ScrollTrigger);
 
-window.addEventListener('load', function(){
-  // Split hero name into chars
+/* ── HERO ENTRANCE (SplitType + GSAP) ───────────────────── */
+window.addEventListener('load', function () {
+  // Split hero name lines into characters
   const split = new SplitType('.hero-name', { types: 'chars', tagName: 'span' });
 
   const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
-  // Initial states
-  gsap.set('.hero-eyebrow', { y: 24, opacity: 0 });
-  gsap.set('.hero-bottom', { y: 20, opacity: 0 });
-  gsap.set('.hero-strip', { y: 12, opacity: 0 });
-  gsap.set('#scrollHint', { opacity: 0 });
-
   tl.from(split.chars, {
     y: '110%', opacity: 0,
-    stagger: { each: 0.038, from: 'start' },
-    duration: 1.1
-  }, 0.1)
-  .to('.hero-eyebrow', { y: 0, opacity: 1, duration: 0.9 }, 0.25)
-  .to('.hero-bottom',  { y: 0, opacity: 1, duration: 0.9 }, 0.7)
-  .to('.hero-strip',   { y: 0, opacity: 1, duration: 0.7 }, 0.9)
-  .to('#scrollHint',   { opacity: 1, duration: 0.8 }, 1.2);
+    stagger: { each: 0.038 },
+    duration: 1.0
+  }, 0)
+  .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.8 }, 0.3)
+  .to('.hero-bottom',  { opacity: 1, y: 0, duration: 0.8 }, 0.65)
+  .to('.hero-strip',   { opacity: 1, y: 0, duration: 0.7 }, 0.85)
+  .to('.scroll-hint',  { opacity: 1, y: 0, duration: 0.6 }, 1.1);
 });
 
-/* ── SCROLLTRIGGER SECTION ANIMATIONS ──────────────────── */
-// Section labels
-document.querySelectorAll('.js-label').forEach(el => {
-  gsap.from(el, {
-    opacity: 0, y: 16,
-    scrollTrigger: { trigger: el, start: 'top 88%', once: true }
-  });
+/* ── SCROLL REVEAL (all .gsap-hidden except hero ones) ──── */
+ScrollTrigger.batch('.gsap-hidden', {
+  onEnter: batch => gsap.to(batch, {
+    opacity: 1, y: 0,
+    stagger: 0.1, duration: 0.85, ease: 'power3.out',
+    overwrite: true
+  }),
+  start: 'top 86%',
+  once: true
 });
 
-// Section titles — split into words
-document.querySelectorAll('.js-title').forEach(el => {
-  const split = new SplitType(el, { types: 'words', tagName: 'span' });
-  gsap.from(split.words, {
-    y: '100%', opacity: 0,
-    stagger: 0.08, duration: 0.9, ease: 'power4.out',
-    scrollTrigger: { trigger: el, start: 'top 85%', once: true }
-  });
-  // Wrap each word in overflow hidden
-  split.words.forEach(w => {
-    const parent = w.parentNode;
-    const wrapper = document.createElement('span');
-    wrapper.style.cssText = 'display:inline-block;overflow:hidden;vertical-align:bottom;';
-    parent.insertBefore(wrapper, w);
-    wrapper.appendChild(w);
-  });
-});
-
-// Fade-up elements
-document.querySelectorAll('.js-fade').forEach((el, i) => {
-  gsap.from(el, {
-    opacity: 0, y: 36,
-    duration: 1, ease: 'power3.out',
-    scrollTrigger: { trigger: el, start: 'top 82%', once: true },
-    delay: (i % 2) * 0.15
-  });
-});
-
-// Staggered stat cells
-ScrollTrigger.create({
-  trigger: '.js-stagger',
-  start: 'top 80%',
-  once: true,
-  onEnter: () => {
-    gsap.from('.stat-cell', {
-      opacity: 0, y: 28,
-      stagger: 0.1, duration: 0.85, ease: 'power3.out'
-    });
-  }
-});
-
-// Project cards
-ScrollTrigger.create({
-  trigger: '.js-cards',
-  start: 'top 80%',
-  once: true,
-  onEnter: () => {
-    gsap.from('.project-card', {
-      opacity: 0, y: 40,
-      stagger: 0.1, duration: 1, ease: 'power3.out'
-    });
-  }
-});
-
-// Skill pills — stagger per group
-document.querySelectorAll('.skill-group').forEach(group => {
-  const pills = group.querySelectorAll('.skill-pill');
-  gsap.from(pills, {
-    opacity: 0, y: 16, scale: 0.94,
-    stagger: 0.04, duration: 0.6, ease: 'power3.out',
-    scrollTrigger: { trigger: group, start: 'top 82%', once: true }
-  });
-});
-
-/* ── STAT COUNTERS ──────────────────────────────────────── */
+/* ── STAT COUNTERS ───────────────────────────────────────── */
 document.querySelectorAll('.stat-num[data-count]').forEach(el => {
-  const target  = +el.dataset.count;
-  const prefix  = el.dataset.prefix  || '';
-  const suffix  = el.dataset.suffix  || '';
-  const obj     = { val: 0 };
+  const target = +el.dataset.count;
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const obj    = { val: 0 };
   gsap.to(obj, {
     val: target, duration: 2.2, ease: 'power2.out',
     scrollTrigger: { trigger: el, start: 'top 85%', once: true },
@@ -1023,113 +929,88 @@ document.querySelectorAll('.stat-num[data-count]').forEach(el => {
   });
 });
 
-/* ── 3D CARD TILT ───────────────────────────────────────── */
-if (window.matchMedia('(hover: hover)').matches) {
-  document.querySelectorAll('.project-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r   = card.getBoundingClientRect();
-      const x   = e.clientX - r.left;
-      const y   = e.clientY - r.top;
-      const cx  = r.width  / 2;
-      const cy  = r.height / 2;
-      const rotX = (y - cy) / cy * -5;
-      const rotY = (x - cx) / cx * 5;
-      gsap.to(card, { rotationX: rotX, rotationY: rotY, transformPerspective: 900, ease: 'power2.out', duration: 0.5 });
-    });
-    card.addEventListener('mouseleave', () => {
-      gsap.to(card, { rotationX: 0, rotationY: 0, ease: 'power3.out', duration: 0.7 });
-    });
+/* ── SKILL PILLS STAGGER ─────────────────────────────────── */
+document.querySelectorAll('.skill-group').forEach(group => {
+  ScrollTrigger.create({
+    trigger: group,
+    start: 'top 84%',
+    once: true,
+    onEnter: () => gsap.from(group.querySelectorAll('.skill-pill'), {
+      opacity: 0, y: 14, scale: 0.94,
+      stagger: 0.035, duration: 0.55, ease: 'power3.out'
+    })
   });
-}
+});
 
-/* ── MAGNETIC BUTTONS ───────────────────────────────────── */
-if (window.matchMedia('(hover: hover)').matches) {
-  document.querySelectorAll('.btn-primary, .btn-secondary, .nav-cta').forEach(btn => {
-    btn.addEventListener('mousemove', e => {
-      const r  = btn.getBoundingClientRect();
-      const x  = e.clientX - r.left - r.width  / 2;
-      const y  = e.clientY - r.top  - r.height / 2;
-      gsap.to(btn, { x: x * 0.22, y: y * 0.22, ease: 'power2.out', duration: 0.4 });
-    });
-    btn.addEventListener('mouseleave', () => {
-      gsap.to(btn, { x: 0, y: 0, ease: 'elastic.out(1, 0.5)', duration: 0.8 });
-    });
-  });
-}
-
-/* ── CUSTOM CURSOR ──────────────────────────────────────── */
-(function(){
+/* ── CURSOR ──────────────────────────────────────────────── */
+(function () {
   const cur  = document.getElementById('cur');
   const ring = document.getElementById('cur-ring');
-  let mx=0, my=0, rx=0, ry=0;
-  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
-  (function tick(){
-    cur.style.left  = mx+'px'; cur.style.top  = my+'px';
-    rx += (mx-rx)*0.11; ry += (my-ry)*0.11;
-    ring.style.left = rx+'px'; ring.style.top = ry+'px';
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function tick() {
+    cur.style.left  = mx + 'px';
+    cur.style.top   = my + 'px';
+    rx += (mx - rx) * 0.11;
+    ry += (my - ry) * 0.11;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
     requestAnimationFrame(tick);
   })();
-  document.querySelectorAll('a,button,.project-card').forEach(el => {
+  document.querySelectorAll('a, button, .project-card').forEach(el => {
     el.addEventListener('mouseenter', () => { cur.classList.add('big'); ring.classList.add('big'); });
     el.addEventListener('mouseleave', () => { cur.classList.remove('big'); ring.classList.remove('big'); });
   });
 })();
 
-/* ── PROGRESS BAR ───────────────────────────────────────── */
-lenis.on('scroll', ({ progress }) => {
-  document.getElementById('progress').style.width = (progress * 100) + '%';
-});
+/* ── PROGRESS BAR ────────────────────────────────────────── */
+window.addEventListener('scroll', function () {
+  const s = document.documentElement.scrollTop;
+  const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  document.getElementById('progress').style.width = (s / h * 100) + '%';
+}, { passive: true });
 
-/* ── ACTIVE NAV ─────────────────────────────────────────── */
-(function(){
-  const sections = ['about','projects','skills','certifications','contact'];
-  const links    = {};
-  sections.forEach(id => {
+/* ── NAV SCROLL STATE ────────────────────────────────────── */
+window.addEventListener('scroll', function () {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+/* ── ACTIVE NAV ──────────────────────────────────────────── */
+(function () {
+  const ids   = ['about','projects','skills','certifications','contact'];
+  const links = {};
+  ids.forEach(id => {
     const a = document.querySelector(`.nav-links a[href="#${id}"]`);
     if (a) links[id] = a;
   });
-  sections.forEach(id => {
+  ids.forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
     ScrollTrigger.create({
-      trigger: el,
-      start: 'top 45%',
-      end:   'bottom 45%',
-      onEnter:      () => setActive(id),
-      onEnterBack:  () => setActive(id),
-      onLeave:      () => clearActive(id),
-      onLeaveBack:  () => clearActive(id)
+      trigger: el, start: 'top 45%', end: 'bottom 45%',
+      onEnter:     () => { Object.values(links).forEach(a => a.classList.remove('active')); if (links[id]) links[id].classList.add('active'); },
+      onEnterBack: () => { Object.values(links).forEach(a => a.classList.remove('active')); if (links[id]) links[id].classList.add('active'); },
+      onLeave:     () => { if (links[id]) links[id].classList.remove('active'); },
+      onLeaveBack: () => { if (links[id]) links[id].classList.remove('active'); }
     });
   });
-  function setActive(id){
-    Object.values(links).forEach(a => a.classList.remove('active'));
-    if (links[id]) links[id].classList.add('active');
-  }
-  function clearActive(id){
-    if (links[id]) links[id].classList.remove('active');
-  }
 })();
 
-/* ── NAV SCROLL STATE ───────────────────────────────────── */
-lenis.on('scroll', ({ scroll }) => {
-  document.getElementById('nav').classList.toggle('scrolled', scroll > 60);
-});
+/* ── HIDE SCROLL HINT ────────────────────────────────────── */
+window.addEventListener('scroll', function () {
+  if (window.scrollY > 80) gsap.to('.scroll-hint', { opacity: 0, duration: 0.4, overwrite: true });
+}, { once: true, passive: true });
 
-/* ── HIDE SCROLL HINT ───────────────────────────────────── */
-lenis.on('scroll', ({ scroll }) => {
-  if (scroll > 80) gsap.to('#scrollHint', { opacity: 0, duration: 0.4 });
-});
-
-/* ── MOBILE MENU ────────────────────────────────────────── */
-function toggleMenu(){
-  const menu   = document.getElementById('mobileMenu');
-  const burger = document.getElementById('burger');
-  const isOpen = menu.style.display === 'flex';
+/* ── MOBILE MENU ─────────────────────────────────────────── */
+function toggleMenu() {
+  var menu   = document.getElementById('mobileMenu');
+  var burger = document.getElementById('burger');
+  var isOpen = menu.style.display === 'flex';
   menu.style.display = isOpen ? 'none' : 'flex';
   burger.classList.toggle('open', !isOpen);
   document.body.style.overflow = isOpen ? '' : 'hidden';
 }
-function closeMenu(){
+function closeMenu() {
   document.getElementById('mobileMenu').style.display = 'none';
   document.getElementById('burger').classList.remove('open');
   document.body.style.overflow = '';
